@@ -1,0 +1,25 @@
+---
+# vars file for easyredmine
+
+cache_dir: /vagrant/scratch
+
+installer_package: easyredmine_package_u2072_d201511101601.zip
+  
+mysql_dump: redmine_2015-11-10_03h09m.Tuesday.sql.gz
+
+
+redmine_root: /opt/easyredmine
+
+redmine_db_service: mariadb
+redmine_db_name: easyredmine
+redmine_db_host: localhost
+redmine_db_user: redmine
+redmine_db_password: '@redmin3r'
+redmine_db_encoding: utf8
+redmine_db_port: 3306
+
+redmine_email_addr: mheiges@uga.edu
+redmine_email_port: 587
+
+sendmail_path: /usr/sbin/sendmail
+sendmail_args: -i -t

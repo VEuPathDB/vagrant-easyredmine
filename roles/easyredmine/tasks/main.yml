@@ -1,0 +1,102 @@
+---
+# tasks file for easyredmine
+
+# - copy: src=nginx.repo
+#         dest=/etc/yum.repos.d/nginx.repo
+#         owner=root
+#         group=root
+#         mode=0644
+#   sudo: yes
+
+- yum: name=epel-release
+  sudo: yes
+
+- get_url: url=https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
+           dest=/etc/yum.repos.d/passenger.repo
+  sudo: yes
+- rpm_key: key=https://packagecloud.io/gpg.key
+  sudo: yes
+
+# this makecache is mostly because I can not find any other way to fully import the GPG.
+# key for the Passenger repo. 'rpm --import' is not sufficient.
+- command: yum -q makecache -y --disablerepo='*' --enablerepo='passenger*'
+  sudo: yes
+  changed_when: False
+
+- yum: name='{{ item }}'
+  sudo: yes
+  with_items:
+    - unzip
+    - rubygems
+    - ruby-devel
+    - zlib-devel
+    - openssl-devel
+    - gcc-c++
+    - mysql-devel
+    - ImageMagick-devel
+    - mariadb-server
+    - MySQL-python
+    - nginx
+    - passenger
+
+- gem: name='{{ item }}'
+  sudo: yes
+  with_items:
+    - bundler
+    - redmine-installer
+
+- stat: path='{{ cache_dir }}/{{ installer_package }}'
+  register: has_installer_package
+
+- name: download installer
+  get_url: url='http://software.apidb.org/source/{{ installer_package }}'
+           dest='{{ cache_dir }}'
+           mode=0640
+           force=no
+  when: has_installer_package.stat.exists == False
+
+- service: name='{{ redmine_db_service }}'
+           state=started
+  sudo: yes
+
+- mysql_db: name='{{ redmine_db_name }}'
+            state=present
+            encoding=utf8
+  sudo: yes
+
+- mysql_user: name='{{ redmine_db_user }}'
+              password='{{ redmine_db_password }}'
+              append_privs=yes
+              priv='{{ redmine_db_name }}.*:ALL'
+              state=present
+  sudo: yes
+
+#- command: ~/bin/redmine install '{{ cache_dir }}/{{ installer_package }}'
+#  sudo: no
+
+- template: dest=/etc/nginx/conf.d/easyredmine.conf
+            src=easyredmine.conf.j2
+  sudo: yes
+  notify: restart nginx
+
+- template: dest=/etc/nginx/conf.d/passenger.conf
+            src=passenger.conf.j2
+  sudo: yes
+  notify: restart nginx
+
+- service: name=nginx
+           state=started
+  sudo: yes
+
+
+# {{ redmine_root }}
+# 1
+# {{ redmine_db_name }}
+# {{ redmine_db_host }}
+# {{ redmine_db_user }}
+# {{ redmine_db_password }}
+# {{ redmine_db_encoding }}
+# {{ redmine_db_port }}
+# 2
+# {{ sendmail_path }}
+# {{ sendmail_args }}

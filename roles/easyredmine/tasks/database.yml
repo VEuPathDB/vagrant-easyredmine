@@ -1,0 +1,6 @@
+- yum: name='{{ item }}'
+  sudo: yes
+  with_items:
+    - mysql-devel
+    - mariadb-server
+    - MySQL-python
