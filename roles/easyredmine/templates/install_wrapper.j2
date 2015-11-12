@@ -1,0 +1,49 @@
+#!/usr/bin/expect
+
+# EuPathDB wrapper on EasyRedmine installer for
+# non-interactive installs by Ansible
+
+set timeout -1
+
+spawn ~/bin/redmine install /vagrant/scratch/easyredmine_package_u2072_d201511101601.zip  
+
+expect -re {[\r\n]+Path for redmine_root}
+send "{{ redmine_root_dir }}\r"
+
+# Database Configuration
+expect -re {[\r\n]+> }
+send "1\r"; # MySQL
+
+expect -re {[\r\n]+Database: }
+send "{{ redmine_db_name }}\r"
+
+expect -re {[\r\n]+Host }
+send  "{{ redmine_db_host }}\r"
+
+expect -re {[\r\n]+Username:}
+send "{{ redmine_db_user }}\r"
+
+expect -re {[\r\n]+Password:}
+send "{{ redmine_db_password }}\r"
+
+expect -re {[\r\n]+Encoding}
+send "{{ redmine_db_encoding }}\r"
+
+expect -re {[\r\n]+Port}
+send "{{ redmine_db_port }}\r"
+
+# Email sending configuration
+expect -re {[\r\n]+> }
+send "2\r"; # Sendmail
+
+expect -re {[\r\n]+Location}
+send "{{ sendmail_path }}\r"
+
+expect -re {[\r\n]+Arguments}
+send -- "{{ sendmail_args }}\r"
+
+# What web-server do you want
+expect -re {[\r\n]+> }
+send "4\r"; # Passenger (nginx)
+
+interact

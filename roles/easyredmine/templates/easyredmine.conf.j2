@@ -1,6 +1,6 @@
 server {
   listen 80;
   server_name {{ ansible_fqdn }};
-  root {{ redmine_root }}/public;
+  root {{ redmine_root_dir }}/public;
   passenger_enabled on;
 }
