@@ -1,32 +1,7 @@
 ---
-# tasks file for easyredmine
-
-# - copy: src=nginx.repo
-#         dest=/etc/yum.repos.d/nginx.repo
-#         owner=root
-#         group=root
-#         mode=0644
-#   sudo: yes
 
 - include: database.yml
 
 - include: redmine.yml
 
 - include: nginx.yml
-
-#- command: ~/bin/redmine install '{{ installer_package }}'
-#  sudo: no
-# when: redmine_db_created|changed
-
-
-# {{ redmine_root_dir }}
-# 1
-# {{ redmine_db_name }}
-# {{ redmine_db_host }}
-# {{ redmine_db_user }}
-# {{ redmine_db_password }}
-# {{ redmine_db_encoding }}
-# {{ redmine_db_port }}
-# 2
-# {{ sendmail_path }}
-# {{ sendmail_args }}
