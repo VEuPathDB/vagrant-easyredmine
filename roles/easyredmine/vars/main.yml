@@ -4,12 +4,12 @@ do_redmine_db_import: False
 
 cache_dir: /vagrant/scratch
 
-installer_package: '{{ cache_dir }}/easyredmine_package_u2072_d201511101601.zip'
+installer_package_name: easyredmine_package_u2072_d201511101601.zip
+installer_package_path: '{{ cache_dir }}/{{ installer_package_name }}'
 
-installer_package_url: 'http://software.apidb.org/source/{{ installer_package }}'
+installer_package_url: 'http://software.apidb.org/source/{{ installer_package_name }}'
   
 redmine_db_dump_file: '{{ cache_dir }}/redmine_dump.sql.gz'
-
 
 redmine_root_dir: /opt/easyredmine
 

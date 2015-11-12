@@ -16,7 +16,7 @@
     - bundler
     - redmine-installer
 
-- stat: path='{{ installer_package }}'
+- stat: path='{{ installer_package_path }}'
   register: has_installer_package
   sudo: no
 
