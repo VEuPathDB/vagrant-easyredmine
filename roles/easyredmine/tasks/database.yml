@@ -1,4 +1,5 @@
-- yum: name='{{ item }}'
+- name: install mysql, mariadb packages
+  yum: name='{{ item }}'
   sudo: yes
   with_items:
     - mysql-devel

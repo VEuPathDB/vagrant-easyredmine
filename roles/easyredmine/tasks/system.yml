@@ -1,0 +1,10 @@
+
+
+- name: install system tools
+  yum: name='{{ item }}'
+  sudo: yes
+  with_items:
+    - rsync
+    - strace
+    - nmap
+

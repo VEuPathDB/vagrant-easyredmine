@@ -5,3 +5,8 @@
   service: name=nginx
            state=restarted
   sudo: yes
+
+- name: restart firewalld
+  service: name=firewalld
+           state=restarted
+  sudo: yes

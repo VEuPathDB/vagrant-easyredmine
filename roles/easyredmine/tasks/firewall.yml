@@ -1,0 +1,16 @@
+
+- service: name=firewalld
+           state=started
+  sudo: yes
+
+- firewalld: service=https
+             permanent=true
+             state=enabled
+  sudo: yes
+  notify: restart firewalld
+
+- firewalld: service=http
+             permanent=true
+             state=enabled
+  sudo: yes
+  notify: restart firewalld

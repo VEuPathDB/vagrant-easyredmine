@@ -14,7 +14,8 @@
 - yum: name=epel-release
   sudo: yes
 
-- yum: name='{{ item }}'
+- name: install nginx, passenger
+  yum: name='{{ item }}'
   sudo: yes
   with_items:
     - nginx

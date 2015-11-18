@@ -1,7 +1,11 @@
 ---
 
+- include: firewall.yml
+
 - include: database.yml
 
 - include: redmine.yml
 
 - include: nginx.yml
+
+- include: system.yml

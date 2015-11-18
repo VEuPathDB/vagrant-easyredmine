@@ -1,4 +1,5 @@
-- yum: name='{{ item }}'
+- name: install redmine package depdendencies
+  yum: name='{{ item }}'
   sudo: yes
   with_items:
     - unzip
@@ -10,7 +11,9 @@
     - ImageMagick-devel
     - expect # for install_wrapper
 
-- gem: name='{{ item }}'
+- name: install bundler, redmine-installer gems
+  gem: name='{{ item }}'
+       user_install=no
   sudo: yes
   with_items:
     - bundler
@@ -48,5 +51,7 @@
 
 - name: run redmine installer
   command: '{{ _redmine_install_wrapper }}'
-  when: mk_redmine_root_dir|changed
+  when: mk_redmine_root_dir|changed and do_redmine_installer == True
   sudo: no
+  environment:
+    PATH: "{{ ansible_env.PATH }}:~/bin"
