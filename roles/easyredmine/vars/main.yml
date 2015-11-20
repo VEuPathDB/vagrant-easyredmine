@@ -5,7 +5,7 @@ do_redmine_installer: False
 
 cache_dir: /vagrant/scratch
 
-installer_package_name: deplugged-redmine.sql.gz
+installer_package_name: easyredmine_package_u2072_d201511101601.zip
 installer_package_path: '{{ cache_dir }}/{{ installer_package_name }}'
 
 installer_package_url: 'http://software.apidb.org/source/{{ installer_package_name }}'
