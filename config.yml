@@ -1,0 +1,26 @@
+
+redmine_owner: redmine
+redmine_owner_ssh_pub_key: ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEAvijH8y7CL9TxWCucjgXRa2q3l0Nc9JW7/SAFHVgt/FYClenS0DMN0nGm1I4z2mtftt8gHz5f6PNqyvfc3F0JcOqiuH9qP79FQ6c8rDmqQEqOuBrufPX11y/9IESIJ0aQ5feQP+WooR6bo/O7BFJS005S3foA/iLphf+smLrW44k= mheiges@sapote.local
+do_redmine_db_import: True
+do_redmine_installer: True
+cache_dir: /vagrant/scratch
+nginx_pem: redmine.vm-rsa.pem
+installer_package_name: easyredmine_package_u2072_d201511101601.zip
+installer_package_path: '{{ cache_dir }}/{{ installer_package_name }}'
+installer_package_url: 'http://software.apidb.org/source/{{ installer_package_name }}'
+redmine_db_dump_file: '{{ cache_dir }}/redmine_unmigrated_dump.sql.gz'
+redmine_root_dir: /opt/easyredmine
+redmine_db_service_provider: mariadb # or mysqld
+redmine_db_name: easyredmine
+redmine_db_host: localhost
+redmine_db_user: redmine
+redmine_db_password: '@redmin3r'
+redmine_db_encoding: utf8
+redmine_db_port: 3306
+redmine_email_addr: mheiges@uga.edu
+redmine_email_port: 587
+sendmail_path: /usr/sbin/sendmail
+sendmail_args: -i -t
+_redmine_db_import_file: /tmp/redmine_dump.sql
+_redmine_db_import_success: /tmp/redmine_db_import_success
+_redmine_install_wrapper: '/home/{{ redmine_owner }}/install_wrapper'
