@@ -5,8 +5,8 @@
 
 set timeout -1
 
-# spawn ~/bin/redmine install /vagrant/scratch/easyredmine_package_u2072_d201511101601.zip  
-spawn /usr/local/bin/redmine install /vagrant/scratch/easyredmine_package_u2072_d201511101601.zip  
+# spawn ~/bin/redmine install {{ cache_dir }}/easyredmine_package_u2072_d201511101601.zip
+spawn /usr/local/bin/redmine install {{ cache_dir }}/easyredmine_package_u2072_d201511101601.zip
 
 expect -re {[\r\n]+Path for redmine_root}
 send "{{ redmine_root_dir }}\r"
