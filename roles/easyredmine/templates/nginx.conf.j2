@@ -1,0 +1,15 @@
+server {
+  listen 80;
+  server_name {{ ansible_fqdn }};
+  return 301 https://$host$request_uri;
+}
+
+server {
+  listen 443;
+  server_name {{ ansible_fqdn }};
+  ssl    on;
+  ssl_certificate     /etc/pki/tls/certs/{{ ansible_fqdn }}.pem;
+  ssl_certificate_key /etc/pki/tls/certs/{{ ansible_fqdn }}.pem;
+  root {{ redmine_root_dir }}/public;
+  passenger_enabled on;
+}

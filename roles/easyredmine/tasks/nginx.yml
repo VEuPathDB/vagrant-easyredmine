@@ -21,13 +21,18 @@
     - nginx
     - passenger
 
-- template: dest=/etc/nginx/conf.d/easyredmine.conf
-            src=easyredmine.conf.j2
+- template: dest='/etc/nginx/conf.d/{{ ansible_fqdn }}.conf'
+            src=nginx.conf.j2
   sudo: yes
   notify: restart nginx
 
 - template: dest=/etc/nginx/conf.d/passenger.conf
             src=passenger.conf.j2
+  sudo: yes
+  notify: restart nginx
+
+- copy: dest='/etc/pki/tls/certs/{{ ansible_fqdn }}.pem'
+        src='{{ nginx_pem }}'
   sudo: yes
   notify: restart nginx
 
