@@ -59,3 +59,13 @@
   sudo: no
   environment:
     PATH: "{{ ansible_env.PATH }}:~/bin"
+
+- copy: dest='/opt/easyredmine/lib/tasks/ebrc_settings.rake'
+        src='ebrc_settings.rake'
+  sudo: yes
+
+- name: Configuring Redmine with eupath preferences
+  command: 'rake redmine:ebrc_settings RAILS_ENV=production'
+  args:
+    chdir: '{{ redmine_root_dir }}'
+  sudo: no
