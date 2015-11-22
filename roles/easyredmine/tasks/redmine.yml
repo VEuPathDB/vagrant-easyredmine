@@ -19,9 +19,11 @@
     - bundler
     - redmine-installer
 
-- stat: path='{{ installer_package_path }}'
+- name: installer package is present?
+  stat: path='{{ installer_package_path }}'
   register: has_installer_package
   sudo: no
+  changed_when: false
 
 - name: download installer
   get_url: url='{{ installer_package_url }}'
@@ -31,7 +33,8 @@
   when: has_installer_package.stat.exists == False
   sudo: no
 
-- template: dest='{{ _redmine_install_wrapper }}'
+- name: add redmine installation wrapper script
+  template: dest='{{ _redmine_install_wrapper }}'
             src=install_wrapper.j2
             mode=750
   sudo: no
@@ -42,9 +45,10 @@
   sudo: yes
   when: redmine_db_created|changed
 
-- file: path='{{ redmine_root_dir }}'
+- name: make installation directory
+  file: path='{{ redmine_root_dir }}'
         state=directory
-        owner=vagrant
+        owner='{{ redmine_owner }}'
         mode=755
   sudo: yes
   register: mk_redmine_root_dir
