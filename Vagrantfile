@@ -13,7 +13,11 @@ Vagrant.configure(2) do |config|
     config.landrush.tld = 'vm.apidb.org'
   end
 
-  config.vm.provision :ansible do |ansible|
+  config.vm.provision 'bootstrap', type: 'ansible' do |ansible|
+    ansible.playbook = 'bootstrap.yml'
+  end
+
+  config.vm.provision 'deploy', type: 'ansible' do |ansible|
     ansible.playbook = 'playbook.yml'
   end
 
