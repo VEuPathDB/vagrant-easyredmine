@@ -10,6 +10,10 @@ Once provisioned, Redmine should be available at http://redmine.vm.apidb.org/
 
 ## Requirements
 
+- `rvm1-ansible` Ansible module
+
+        ansible-galaxy install rvm_io.rvm1-ruby
+
 - `scratch/redmine_dump.sql.gz` - a mysql dump of our production
 database.  _(One of the daily backups on our production Redmine server
 is suitable. See `/var/lib/mysql.backups/daily/redmine/`.)_

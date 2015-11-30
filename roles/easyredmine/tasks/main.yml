@@ -1,11 +1,13 @@
 ---
 
+- include: system.yml
+
 - include: firewall.yml
 
 - include: database.yml
+  when: do_database_management == True
 
 - include: redmine.yml
 
 - include: nginx.yml
 
-- include: system.yml

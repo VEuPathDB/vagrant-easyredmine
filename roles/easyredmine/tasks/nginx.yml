@@ -38,4 +38,5 @@
 
 - service: name=nginx
            state=started
+           enabled=yes
   sudo: yes

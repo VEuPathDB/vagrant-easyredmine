@@ -10,3 +10,7 @@
   service: name=firewalld
            state=restarted
   sudo: yes
+
+- name: rebuild mail aliases
+  command: /usr/bin/newaliases
+  sudo: yes

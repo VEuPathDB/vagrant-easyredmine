@@ -2,6 +2,7 @@
   yum: name='{{ item }}'
   sudo: yes
   with_items:
+    - mysql-devel
     - unzip
     - rubygems
     - ruby-devel
@@ -14,6 +15,7 @@
 - name: install bundler, redmine-installer gems
   gem: name='{{ item }}'
        user_install=no
+       executable=/usr/local/bin/gem # RVM's version
   sudo: yes
   with_items:
     - bundler
@@ -27,7 +29,7 @@
 
 - name: download installer
   get_url: url='{{ installer_package_url }}'
-           dest='{{ cache_dir }}'
+           dest='{{ remote_scratch_path }}'
            mode=0640
            force=no
   when: has_installer_package.stat.exists == False
@@ -54,18 +56,29 @@
   register: mk_redmine_root_dir
 
 - name: run redmine installer
-  command: '{{ _redmine_install_wrapper }}'
+  shell: 'source ~/.bash_profile && {{ _redmine_install_wrapper }}'
   when: mk_redmine_root_dir|changed and do_redmine_installer == True
+  register: installer_run
   sudo: no
-  environment:
-    PATH: "{{ ansible_env.PATH }}:~/bin"
 
 - copy: dest='/opt/easyredmine/lib/tasks/ebrc_settings.rake'
         src='ebrc_settings.rake'
   sudo: yes
 
+- name: restrict config permissions
+  file: path='{{ redmine_root_dir }}/config'
+        mode=0770
+  
 - name: Configuring Redmine with eupath preferences
   command: 'rake redmine:ebrc_settings RAILS_ENV=production'
   args:
     chdir: '{{ redmine_root_dir }}'
   sudo: no
+  when: do_redmine_installer == True
+
+- name: adding crontab
+  cron: name="redmine tasks"
+        minute="*/15"
+        job='cd {{ redmine_root_dir }} && /usr/local/bin/bundle exec rake easyproject:scheduler:run_tasks RAILS_ENV=production > /dev/null'
+        user='{{ redmine_owner }}'
+  sudo: yes

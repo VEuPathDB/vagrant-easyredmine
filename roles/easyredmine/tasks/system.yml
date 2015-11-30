@@ -7,4 +7,34 @@
     - rsync
     - strace
     - nmap
+    - yum-utils
+    - sendmail
+    - at
+    - nfs-utils
+    - vim-enhanced
+    - tmpwatch
+    - ntpdate
+    - cronie-noanacron
+    - ruby
+    - mailx
+    - crontabs
+    - logrotate
+    - which
+    - net-tools
+    - lsof
+    - screen
+    - mlocate
+
+- service: name=sendmail
+           state=started
+           enabled=yes
+  sudo: yes
+
+- name: set up redmine user mail aliases
+  lineinfile: >
+    dest=/etc/aliases
+    regexp="\b{{ redmine_owner }}"
+    line="{{ redmine_owner }}: {{ redmine_mail_alias }}"
+  sudo: yes
+  notify: rebuild mail aliases
 

@@ -6,6 +6,7 @@
     - config.yml
 
   roles:
+    - { role: rvm_io.rvm1-ruby, tags: ruby, sudo: True }
     - { role: easyredmine, sudo: no }
 
   tasks:

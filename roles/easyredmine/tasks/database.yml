@@ -14,6 +14,8 @@
 - mysql_db: name='{{ redmine_db_name }}'
             state=present
             encoding=utf8
+            login_user='{{ mysql_admin_login }}'
+            login_password='{{ mysql_admin_password }}'
   sudo: yes
   register: redmine_db_created
 
@@ -34,6 +36,8 @@
   mysql_db: name='{{ redmine_db_name }}'
             state=import
             target='{{ _redmine_db_import_file }}'
+            login_user='{{ mysql_admin_login }}'
+            login_password='{{ mysql_admin_password }}'
   register: redmine_db_import
   when: do_redmine_db_import == True and (redmine_db_import_done.stat.exists == False or redmine_db_created|changed)
   
@@ -41,7 +45,7 @@
         state=touch
   when: do_redmine_db_import == True and redmine_db_import_done.stat.exists == False and redmine_db_import|success 
 
-- name: create db user
+- name: create redmine db user
   mysql_user: name='{{ redmine_db_user }}'
               password='{{ redmine_db_password }}'
               append_privs=yes

@@ -1,14 +1,15 @@
 ---
 - hosts: all
-  sudo: yes
+  sudo: false
   gather_facts: false
-  vars_files:
-    - config.yml
+  #vars_files:
+  #  - production_config.yml
 
   tasks:
-  
+
     - name: Create user of Redmine installation
       user: name='{{ redmine_owner }}'
+            state=present
             ssh_key_file=.ssh/id_rsa
 
     - name: Set up authorized_keys for the redmine account

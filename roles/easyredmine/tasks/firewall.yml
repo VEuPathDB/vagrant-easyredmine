@@ -1,6 +1,7 @@
 
 - service: name=firewalld
            state=started
+           enabled=yes
   sudo: yes
 
 - firewalld: service=https
@@ -14,3 +15,25 @@
              state=enabled
   sudo: yes
   notify: restart firewalld
+
+- firewalld: rich_rule='rule service name="ssh" family="ipv4" source address="{{ item }}" accept'
+             permanent=true
+             state=enabled
+  with_items:
+    - 128.192.75.0/24
+    - 192.168.0.0/16
+    - 172.16.0.0/16
+    - 128.91.49.0/24
+  sudo: yes
+  notify: restart firewalld
+
+- firewalld: service=ssh
+             permanent=true
+             state=disabled
+  sudo: yes
+  notify: restart firewalld
+
+- name: restart firewalld
+  service: name=firewalld
+           state=restarted
+  sudo: yes
