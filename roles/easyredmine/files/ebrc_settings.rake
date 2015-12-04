@@ -8,7 +8,7 @@ END_DESC
 namespace :redmine do
   task :ebrc_settings => :environment do
 
-    Setting.ui_theme = '' # Default
+    Setting.ui_theme = 'easy_widescreen'
 
     EasySetting.where(:name => 'hide_login_quotes').each do |setting|
       setting.value = true
