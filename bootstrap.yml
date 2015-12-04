@@ -7,8 +7,10 @@
 
   tasks:
 
+      # match uid with NFS server
     - name: Create user of Redmine installation
       user: name='{{ redmine_owner }}'
+            uid=1303
             state=present
             ssh_key_file=.ssh/id_rsa
 
