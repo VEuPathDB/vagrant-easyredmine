@@ -1,12 +1,20 @@
 server {
   listen 80;
+  {% if is_production_vm %}
+  server_name redmine.apidb.org;
+  {% else %}
   server_name {{ ansible_fqdn }};
+  {% endif %}
   return 301 https://$host$request_uri;
 }
 
 server {
   listen 443;
+  {% if is_production_vm %}
+  server_name redmine.apidb.org;
+  {% else %}
   server_name {{ ansible_fqdn }};
+  {% endif %}
   ssl    on;
   ssl_certificate     /etc/pki/tls/certs/{{ ansible_fqdn }}.pem;
   ssl_certificate_key /etc/pki/tls/certs/{{ ansible_fqdn }}.pem;

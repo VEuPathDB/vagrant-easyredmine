@@ -21,7 +21,7 @@
     - nginx
     - passenger
 
-- template: dest='/etc/nginx/conf.d/{{ ansible_fqdn }}.conf'
+- template: dest='/etc/nginx/conf.d/easyredmine.conf'
             src=nginx.conf.j2
   sudo: yes
   notify: restart nginx
