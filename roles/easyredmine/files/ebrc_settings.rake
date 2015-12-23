@@ -34,5 +34,11 @@ namespace :redmine do
       setting.save
     end
 
+    EasySetting.where(:name => :easy_select_limit).each do |setting|
+      setting.value = '10001'
+      setting.save
+    end
+
   end
 end
+
