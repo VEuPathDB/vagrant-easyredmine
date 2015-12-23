@@ -1,0 +1,14 @@
+#!/bin/bash
+
+cd {{ redmine_root_dir }}
+
+/usr/local/bin/bundle exec rake \
+    redmine:email:receive_imap \
+    RAILS_ENV="production" \
+    project=sysdba \
+    allow_override=project,tracker,priority,category \
+    host=imap.gmail.com \
+    port=993 ssl=SSL  \
+    username={{ smtp_username }} \
+    password={{ smtp_password }}
+
