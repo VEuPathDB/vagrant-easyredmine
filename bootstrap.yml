@@ -16,7 +16,8 @@
 
     - name: Set up authorized_keys for the redmine account
       authorized_key: user='{{ redmine_owner }}'
-                      key="{{ redmine_owner_ssh_pub_key }}"
+                      key='{{ item }}'
+      with_items: "{{ redmine_owner_ssh_pub_keys }}"
 
     - name: Set up sudoers for the redmnine account
       template: dest='/etc/sudoers.d/10_{{ redmine_owner }}'
