@@ -50,3 +50,8 @@ redmine installer (if run).
 `redmine_root_dir` does not exist or if there is a detected change in
 the database (e.g. you drop it and let Ansible recreate it).
 
+## Production Installation
+
+See https://wiki.apidb.org/index.php/EasyRedmineVM for instructions for
+using the Ansible plays from this project to prepare a KVM image for
+production use.
