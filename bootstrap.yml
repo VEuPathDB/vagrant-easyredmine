@@ -2,15 +2,16 @@
 - hosts: all
   sudo: false
   gather_facts: false
-  #vars_files:
-  #  - production_config.yml
+  vars_files:
+    #- production_config.yml
+    - config.yml
 
   tasks:
 
       # match uid with NFS server
     - name: Create user of Redmine installation
       user: name='{{ redmine_owner }}'
-            uid=1303
+            uid='{{ redmine_uid }}'
             state=present
             ssh_key_file=.ssh/id_rsa
 

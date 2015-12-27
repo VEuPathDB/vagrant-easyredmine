@@ -3,6 +3,7 @@
 - include: system.yml tags=system
 
 - include: firewall.yml tags=firewall
+  when: is_production_vm == True
 
 - include: database.yml tags=database
   when: do_database_management == True

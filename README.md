@@ -11,9 +11,13 @@ Once provisioned, Redmine should be available at http://redmine.vm.apidb.org/
 
 ## Requirements
 
-- `rvm1-ansible` Ansible module
+- Vagrant installed on your local host
 
-        ansible-galaxy install rvm_io.rvm1-ruby
+- Ansible [installed on your local host](http://docs.ansible.com/ansible/intro_installation.html)
+
+- `rvm1-ansible` Ansible module installed on your local host
+
+        $ ansible-galaxy install rvm_io.rvm1-ruby
 
 - Vagrant `landrush` plugin
 
@@ -21,7 +25,7 @@ Once provisioned, Redmine should be available at http://redmine.vm.apidb.org/
 
 - `scratch/redmine_dump.sql.gz` - a mysql dump of our production
 database.  _(One of the daily backups on our production Redmine server
-is suitable. See `/var/lib/mysql.backups/daily/redmine/`.)_ This is
+is suitable. See `/var/lib/mysql.backups/daily/easyredmine/`.)_ This is
 optional. To have the redmine installer create an empty database, set
 `do_redmine_db_import` to `False` in `config.yml`
 

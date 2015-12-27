@@ -1,11 +1,12 @@
 
 redmine_mail_alias: redmine@localhost
 redmine_owner: vagrant
+redmine_uid: ''
 redmine_owner_ssh_pub_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEAvijH8y7CL9TxWCucjgXRa2q3l0Nc9JW7/SAFHVgt/FYClenS0DMN0nGm1I4z2mtftt8gHz5f6PNqyvfc3F0JcOqiuH9qP79FQ6c8rDmqQEqOuBrufPX11y/9IESIJ0aQ5feQP+WooR6bo/O7BFJS005S3foA/iLphf+smLrW44k= mheiges@sapote.local
   - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBKXyFF/K1AT52FGrq5Z27guGgHDELy8W8NInAgrDQZQP+U5ORs9wB8SsuD8vyhYy3G2Tz8xAKCxWcFHvuNDv4VIg8D6ge7VMdWHGtbS8UC153dK3mMQ+CMTgJsezqgk0j4/ot7LaQ6yurb8t27TOHeqEdHyB5O/eL6pYntsKqEWQ== mguidry@uga.edu
-do_database_management: True # no import unless management == true
-do_redmine_db_import: True
+do_database_management: True
+do_redmine_db_import: True # no import unless do_database_management is also true
 do_redmine_installer: True
 remote_scratch_path: /vagrant/scratch
 nginx_pem: redmine.vm-rsa.pem
