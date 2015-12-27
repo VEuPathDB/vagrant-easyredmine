@@ -26,12 +26,14 @@
     - 128.91.49.0/24
   sudo: yes
   notify: restart firewalld
+  when: is_production_vm == True
 
 - firewalld: service=ssh
              permanent=true
              state=disabled
   sudo: yes
   notify: restart firewalld
+  when: is_production_vm == True
 
 - name: restart firewalld
   service: name=firewalld
