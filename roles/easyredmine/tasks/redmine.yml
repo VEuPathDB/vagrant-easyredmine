@@ -11,6 +11,8 @@
     - gcc-c++
     - ImageMagick-devel
     - expect # for install_wrapper
+    - subversion # Repository integration
+    - git # Repository integration
 
 - name: install bundler, redmine-installer gems
   gem: name='{{ item }}'
@@ -89,10 +91,23 @@
             mode=750
   sudo: no
 
+- name: add redmine repository fetch script
+  template: dest='{{ redmine_root_dir }}/script/redmine_fetch_changesets'
+            src=redmine_fetch_changesets.j2
+            mode=750
+  sudo: no
+
 - name: adding redmine_receive_imap crontab
   cron: name="fetch from imap"
         minute="*/5"
         job="({{ redmine_root_dir }}/script/redmine_receive_imap 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_receive_imap"
+        user='{{ redmine_owner }}'
+  sudo: yes
+
+- name: adding redmine_fetch_changesets crontab
+  cron: name="fetch from repository"
+        minute="*/5"
+        job="({{ redmine_root_dir }}/script/redmine_fetch_changesets 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_fetch_changesets"
         user='{{ redmine_owner }}'
   sudo: yes
 
