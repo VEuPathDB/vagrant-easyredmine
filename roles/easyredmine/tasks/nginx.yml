@@ -21,7 +21,22 @@
     - nginx
     - passenger
 
+- stat: path='{{ dharam_pem_path }}'
+  register: dharam_pem
+
+# https://michael.lustfield.net/nginx/getting-a-perfect-ssl-labs-score
+- name: generate new Diffie-Hellman group
+  command: 'openssl dhparam -out {{ dharam_pem_path }} 2048'
+  sudo: yes
+  notify: restart nginx
+  when: dharam_pem.stat.exists == False
+
 - template: dest='/etc/nginx/conf.d/easyredmine.conf'
+            src=easyredmine.conf.j2
+  sudo: yes
+  notify: restart nginx
+
+- template: dest='/etc/nginx/nginx.conf'
             src=nginx.conf.j2
   sudo: yes
   notify: restart nginx
