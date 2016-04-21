@@ -111,3 +111,9 @@
         user='{{ redmine_owner }}'
   sudo: yes
 
+- name: set session cookie as secure
+  lineinfile: >
+      dest='{{ redmine_root_dir }}/config/application.rb'
+      regexp='^\s*config.session_store'
+      line="    config.session_store :cookie_store, :key => '_redmine_session', :secure => true"
+  notify: restart nginx
