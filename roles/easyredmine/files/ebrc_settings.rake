@@ -1,6 +1,5 @@
 desc <<-END_DESC
-Delete orphaned custom_values table rows from the database that once belonged to Projects that are now deleted. This
-cleanup is needed before migrating to Easy Redmine.
+Custom Redmine settings for EuPathDB.
 
 Example:
   rake redmine:ebrc_settings RAILS_ENV=production 
