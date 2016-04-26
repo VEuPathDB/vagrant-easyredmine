@@ -35,6 +35,26 @@
   notify: restart firewalld
   when: is_production_vm == True
 
+- name: define new icmp types for timestamp responses
+  copy: dest='/etc/firewalld/icmptypes/{{ item }}.xml'
+        src='{{ item }}.xml'
+  sudo: yes
+  with_items:
+    - timestamp-reply
+    - timestamp-request
+
+- name: load new icmp types for timestamp responses
+  command: firewall-cmd --reload
+  sudo: yes
+
+- name: disable icmp timestamp responses
+  command: firewall-cmd --permanent --zone=public --add-icmp-block={{ item }}
+  sudo: yes
+  with_items:
+    - timestamp-reply
+    - timestamp-request
+  notify: restart firewalld
+
 - name: restart firewalld
   service: name=firewalld
            state=restarted
