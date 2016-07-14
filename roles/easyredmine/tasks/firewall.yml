@@ -2,18 +2,18 @@
 - service: name=firewalld
            state=started
            enabled=yes
-  sudo: yes
+  become: yes
 
 - firewalld: service=https
              permanent=true
              state=enabled
-  sudo: yes
+  become: yes
   notify: restart firewalld
 
 - firewalld: service=http
              permanent=true
              state=enabled
-  sudo: yes
+  become: yes
   notify: restart firewalld
 
 - firewalld: rich_rule='rule service name="ssh" family="ipv4" source address="{{ item }}" accept'
@@ -24,32 +24,32 @@
     - 192.168.0.0/16
     - 172.16.0.0/16
     - 128.91.49.0/24
-  sudo: yes
+  become: yes
   notify: restart firewalld
   when: is_production_vm == True
 
 - firewalld: service=ssh
              permanent=true
              state=disabled
-  sudo: yes
+  become: yes
   notify: restart firewalld
   when: is_production_vm == True
 
 - name: define new icmp types for timestamp responses
   copy: dest='/etc/firewalld/icmptypes/{{ item }}.xml'
         src='{{ item }}.xml'
-  sudo: yes
+  become: yes
   with_items:
     - timestamp-reply
     - timestamp-request
 
 - name: load new icmp types for timestamp responses
   command: firewall-cmd --reload
-  sudo: yes
+  become: yes
 
 - name: disable icmp timestamp responses
   command: firewall-cmd --permanent --zone=public --add-icmp-block={{ item }}
-  sudo: yes
+  become: yes
   with_items:
     - timestamp-reply
     - timestamp-request
@@ -58,4 +58,4 @@
 - name: restart firewalld
   service: name=firewalld
            state=restarted
-  sudo: yes
+  become: yes

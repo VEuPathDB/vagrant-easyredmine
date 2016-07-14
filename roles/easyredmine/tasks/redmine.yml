@@ -1,6 +1,6 @@
 - name: install redmine package depdendencies
   yum: name='{{ item }}'
-  sudo: yes
+  become: yes
   with_items:
     - mysql-devel
     - unzip
@@ -18,7 +18,7 @@
   gem: name='{{ item }}'
        user_install=no
        executable=/usr/local/bin/gem # RVM's version
-  sudo: yes
+  become: yes
   with_items:
     - bundler
     - redmine-installer
@@ -26,7 +26,7 @@
 - name: installer package is present?
   stat: path='{{ installer_package_path }}'
   register: has_installer_package
-  sudo: no
+  become: no
   changed_when: false
 
 - name: download installer
@@ -35,37 +35,37 @@
            mode=0640
            force=no
   when: has_installer_package.stat.exists == False
-  sudo: no
+  become: no
 
 - name: add redmine installation wrapper script
   template: dest='{{ _redmine_install_wrapper }}'
             src=install_wrapper.j2
             mode=750
-  sudo: no
+  become: no
 
 - name: delete contents of redmine root directory
   file: path='{{ redmine_root_dir }}'
         state=absent
-  sudo: yes
-  when: redmine_db_created|changed
+  become: yes
+  when: redmine_db_created is defined and redmine_db_created|changed
 
 - name: make installation directory
   file: path='{{ redmine_root_dir }}'
         state=directory
         owner='{{ redmine_owner }}'
         mode=755
-  sudo: yes
+  become: yes
   register: mk_redmine_root_dir
 
 - name: run redmine installer
-  shell: 'source ~/.bash_profile && {{ _redmine_install_wrapper }}'
+  shell: 'source ~/.bash_profile && {{ _redmine_install_wrapper }} > ~/install.log'
   when: mk_redmine_root_dir|changed and do_redmine_installer == True
   register: installer_run
-  sudo: no
+  become: no
 
 - copy: dest='/opt/easyredmine/lib/tasks/ebrc_settings.rake'
         src='ebrc_settings.rake'
-  sudo: yes
+  become: yes
 
 - name: restrict config permissions
   file: path='{{ redmine_root_dir }}/config'
@@ -75,7 +75,7 @@
   command: 'rake redmine:ebrc_settings RAILS_ENV=production'
   args:
     chdir: '{{ redmine_root_dir }}'
-  sudo: no
+  become: no
   when: do_redmine_installer == True
 
 - name: adding run_tasks crontab
@@ -83,33 +83,33 @@
         minute="*/15"
         job='cd {{ redmine_root_dir }} && /usr/local/bin/bundle exec rake easyproject:scheduler:run_tasks RAILS_ENV=production > /dev/null'
         user='{{ redmine_owner }}'
-  sudo: yes
+  become: yes
 
 - name: add redmine IMAP fetch script
   template: dest='{{ redmine_root_dir }}/script/redmine_receive_imap'
             src=redmine_receive_imap.j2
             mode=750
-  sudo: no
+  become: no
 
 - name: add redmine repository fetch script
   template: dest='{{ redmine_root_dir }}/script/redmine_fetch_changesets'
             src=redmine_fetch_changesets.j2
             mode=750
-  sudo: no
+  become: no
 
 - name: adding redmine_receive_imap crontab
   cron: name="fetch from imap"
         minute="*/5"
         job="({{ redmine_root_dir }}/script/redmine_receive_imap 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_receive_imap"
         user='{{ redmine_owner }}'
-  sudo: yes
+  become: yes
 
 - name: adding redmine_fetch_changesets crontab
   cron: name="fetch from repository"
         minute="*/5"
         job="({{ redmine_root_dir }}/script/redmine_fetch_changesets 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_fetch_changesets"
         user='{{ redmine_owner }}'
-  sudo: yes
+  become: yes
 
 - name: set session cookie as secure
   lineinfile: >

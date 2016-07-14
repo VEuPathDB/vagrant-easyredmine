@@ -1,6 +1,6 @@
 - name: install mysql, mariadb packages
   yum: name='{{ item }}'
-  sudo: yes
+  become: yes
   with_items:
     - mysql-devel
     - mariadb-server
@@ -9,14 +9,14 @@
 
 - service: name='{{ redmine_db_service_provider }}'
            state=started
-  sudo: yes
+  become: yes
 
 - mysql_db: name='{{ redmine_db_name }}'
             state=present
             encoding=utf8
             login_user='{{ mysql_admin_login }}'
             login_password='{{ mysql_admin_password }}'
-  sudo: yes
+  become: yes
   register: redmine_db_created
 
 # source database may not have same name as VM db.
@@ -51,5 +51,5 @@
               append_privs=yes
               priv='{{ redmine_db_name }}.*:ALL'
               state=present
-  sudo: yes
+  become: yes
 

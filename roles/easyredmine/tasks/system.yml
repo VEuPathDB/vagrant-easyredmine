@@ -2,7 +2,7 @@
 
 - name: install system tools
   yum: name='{{ item }}'
-  sudo: yes
+  become: yes
   with_items:
     - rsync
     - strace
@@ -28,13 +28,13 @@
 - service: name=sendmail
            state=started
            enabled=yes
-  sudo: yes
+  become: yes
 
 - name: set up redmine user mail aliases
   lineinfile: >
     dest=/etc/aliases
     regexp="\b{{ redmine_owner }}"
     line="{{ redmine_owner }}: {{ redmine_mail_alias }}"
-  sudo: yes
+  become: yes
   notify: rebuild mail aliases
 

@@ -4,13 +4,13 @@
 - name: restart nginx
   service: name=nginx
            state=restarted
-  sudo: yes
+  become: yes
 
 - name: restart firewalld
   service: name=firewalld
            state=restarted
-  sudo: yes
+  become: yes
 
 - name: rebuild mail aliases
   command: /usr/bin/newaliases
-  sudo: yes
+  become: yes

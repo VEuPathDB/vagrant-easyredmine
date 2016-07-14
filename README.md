@@ -54,6 +54,16 @@ redmine installer (if run).
 `redmine_root_dir` does not exist or if there is a detected change in
 the database (e.g. you drop it and let Ansible recreate it).
 
+**Note:** The `run redmine installer` Ansible task can take a long time
+and there is no stdout to the console to indicate progress. The
+installer includes installing several Ruby gems and database migration
+steps so the installer run time is affected by network speed and
+database state. On the other hand the installer may prompt for input
+that the expect script is not expecting. This causes the installer to
+hang indefinitely waiting for input that the non-interactive script
+cannot provide. The `~/install.log` captures the stdout of the process
+and should be consulted to check for running state.
+
 ## Production Installation
 
 See https://wiki.apidb.org/index.php/EasyRedmineVM for instructions for

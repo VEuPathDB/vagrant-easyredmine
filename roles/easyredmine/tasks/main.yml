@@ -1,15 +1,21 @@
 ---
 
-- include: system.yml tags=system
+- include: system.yml
+  tags: system
 
-- include: firewall.yml tags=firewall
+- include: firewall.yml
+  tags: firewall
 
-- include: database.yml tags=database
+- include: database.yml
+  tags: database
   when: do_database_management == True
 
-- include: redmine.yml tags=redmine
+- include: redmine.yml 
+  tags: redmine
 
-- include: nginx.yml tags=nginx
+- include: nginx.yml 
+  tags: nginx
 
-- include: attachments_storage.yml tags=attachments_storage
+- include: attachments_storage.yml
+  tags: attachments_storage
   when: is_production_vm == True

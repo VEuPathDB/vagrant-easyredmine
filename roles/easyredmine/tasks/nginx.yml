@@ -1,22 +1,22 @@
 - get_url: url=https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
            dest=/etc/yum.repos.d/passenger.repo
-  sudo: yes
+  become: yes
 - rpm_key: key=https://packagecloud.io/gpg.key
-  sudo: yes
+  become: yes
 
 # this makecache is mostly because I can not find any other way to fully
 # import the GPG. key for the Passenger repo. 'rpm --import' is not
 # sufficient.
-- command: yum -q makecache -y --disablerepo='*' --enablerepo='passenger*'
-  sudo: yes
+- command: /usr/bin/yum -q makecache -y --disablerepo='*' --enablerepo='passenger*'
+  become: yes
   changed_when: False
 
 - yum: name=epel-release
-  sudo: yes
+  become: yes
 
 - name: install nginx, passenger
   yum: name='{{ item }}'
-  sudo: yes
+  become: yes
   with_items:
     - nginx
     - passenger
@@ -27,31 +27,31 @@
 # https://michael.lustfield.net/nginx/getting-a-perfect-ssl-labs-score
 - name: generate new Diffie-Hellman group
   command: 'openssl dhparam -out {{ dharam_pem_path }} 2048'
-  sudo: yes
+  become: yes
   notify: restart nginx
   when: dharam_pem.stat.exists == False
 
 - template: dest='/etc/nginx/conf.d/easyredmine.conf'
             src=easyredmine.conf.j2
-  sudo: yes
+  become: yes
   notify: restart nginx
 
 - template: dest='/etc/nginx/nginx.conf'
             src=nginx.conf.j2
-  sudo: yes
+  become: yes
   notify: restart nginx
 
 - template: dest=/etc/nginx/conf.d/passenger.conf
             src=passenger.conf.j2
-  sudo: yes
+  become: yes
   notify: restart nginx
 
 - copy: dest='/etc/pki/tls/certs/{{ ansible_fqdn }}.pem'
         src='{{ nginx_pem }}'
-  sudo: yes
+  become: yes
   notify: restart nginx
 
 - service: name=nginx
            state=started
            enabled=yes
-  sudo: yes
+  become: yes

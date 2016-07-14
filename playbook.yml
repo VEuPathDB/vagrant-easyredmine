@@ -1,12 +1,12 @@
 ---
 - hosts: all
-  sudo: yes
+  become: yes
   gather_facts: True
   vars_files:
     - config.yml
 
   roles:
-    - { role: rvm_io.rvm1-ruby, tags: ruby, sudo: True }
-    - { role: easyredmine, sudo: no }
+    - { role: rvm_io.rvm1-ruby, tags: ruby, become: True }
+    - { role: easyredmine, become: no }
 
   tasks:
