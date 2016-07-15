@@ -1,13 +1,16 @@
 - get_url: url=https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
            dest=/etc/yum.repos.d/passenger.repo
   become: yes
+
 - rpm_key: key=https://packagecloud.io/gpg.key
   become: yes
 
 # this makecache is mostly because I can not find any other way to fully
-# import the GPG. key for the Passenger repo. 'rpm --import' is not
+# import the GPG. key for the Passenger repo. 'rpm_key' is not
 # sufficient.
-- command: /usr/bin/yum -q makecache -y --disablerepo='*' --enablerepo='passenger*'
+# The use of /usr/bin/env is a hack to avoid Ansible's "Consider using
+# yum module..." warnings when it sees 'yum' as the primary command.
+- command: /usr/bin/env yum -q makecache -y --disablerepo='*' --enablerepo='passenger*'
   become: yes
   changed_when: False
 
