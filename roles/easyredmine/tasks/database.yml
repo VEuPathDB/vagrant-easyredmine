@@ -9,6 +9,7 @@
 
 - service: name='{{ redmine_db_service_provider }}'
            state=started
+           enabled=yes
   become: yes
 
 - mysql_db: name='{{ redmine_db_name }}'
