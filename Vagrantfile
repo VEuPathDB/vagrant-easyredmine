@@ -2,7 +2,7 @@ Vagrant.configure(2) do |config|
 
   config.ssh.forward_agent = 'true'
 
-  config.vm.box = "ebrc/centos-7-64-puppet"
+  config.vm.box = 'ebrc/centos-7-64-puppet'
  
   config.vm.hostname = 'redmine.vm.apidb.org'
   config.vm.network :private_network, type: 'dhcp'
@@ -10,6 +10,10 @@ Vagrant.configure(2) do |config|
   if Vagrant.has_plugin?('landrush')
     config.landrush.enabled = true
     config.landrush.tld = 'vm.apidb.org'
+  end
+
+  config.vm.provider 'virtualbox' do |v|
+    v.memory = 2048
   end
 
 #  config.vm.provision 'bootstrap', type: 'ansible' do |ansible|
