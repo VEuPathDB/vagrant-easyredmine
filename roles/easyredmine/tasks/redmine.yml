@@ -63,9 +63,18 @@
   register: installer_run
   become: no
 
-- copy: dest='/opt/easyredmine/lib/tasks/ebrc_settings.rake'
+- name: install ebrc_settings.rake
+  copy: dest='/opt/easyredmine/lib/tasks/ebrc_settings.rake'
         src='ebrc_settings.rake'
+        owner='{{ redmine_owner }}'
   become: yes
+
+- name: install additional_environment.rb
+  copy: dest='/opt/easyredmine/config/additional_environment.rb'
+        src='additional_environment.rb'
+        owner='{{ redmine_owner }}'
+  become: yes
+  notify: restart nginx
 
 - name: restrict config permissions
   file: path='{{ redmine_root_dir }}/config'
@@ -110,10 +119,3 @@
         job="({{ redmine_root_dir }}/script/redmine_fetch_changesets 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_fetch_changesets"
         user='{{ redmine_owner }}'
   become: yes
-
-- name: set session cookie as secure
-  lineinfile: >
-      dest='{{ redmine_root_dir }}/config/application.rb'
-      regexp='^\s*config.session_store'
-      line="    config.session_store :cookie_store, :key => '_redmine_session', :secure => true"
-  notify: restart nginx
