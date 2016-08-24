@@ -21,7 +21,7 @@ Once provisioned, Redmine should be available at http://redmine.vm.apidb.org/
 
 - Vagrant `landrush` plugin
 
-        ansible-galaxy install landrush
+        vagrant install landrush
 
 - `scratch/redmine_dump.sql.gz` - a mysql dump of our production
 database.  _(One of the daily backups on our production Redmine server
@@ -31,8 +31,8 @@ optional. To have the redmine installer create an empty database, set
 
 - `scratch/easyredmine_package_u2072_d201511101601.zip` - the
 installation package provided by EasyRedmine (downloaded from their
-customer portal). Set the file name for `installer_package_name` in
-`config.yml`
+[customer portal](https://www.easyredmine.com/customer-portal)).
+Set the file name for `installer_package_name` in `config.yml`
 
 - When working with a database imported from our production Redmine, you
 will need a VPN tunnel to UGA's campus so LDAP authentication queries
@@ -69,3 +69,16 @@ and should be consulted to check for running state.
 See https://wiki.apidb.org/index.php/EasyRedmineVM for instructions for
 using the Ansible plays from this project to prepare a KVM image for
 production use.
+
+
+## Development Troubleshooting
+
+To manually delete the database on the virtual machine and manually
+import the dump file.
+
+    mysql -u root --password='' -e "DROP DATABASE easyredmine"
+    mysql -u root --password='' -e "CREATE DATABASE easyredmine CHARACTER SET utf8"
+    mysql -u root --password='' -e "CREATE USER 'easyredmine' IDENTIFIED BY '@redmin3r'"
+    mysql -u root --password='' -e "CREATE USER 'easyredmine'@'localhost' IDENTIFIED BY '@redmin3r'"
+    mysql -u root --password='' -e "GRANT ALL PRIVILEGES ON easyredmine.* TO 'easyredmine'"
+    zcat /vagrant/scratch/redmine_dump.sql.gz | mysql -u easyredmine -p'@redmin3r' easyredmine
