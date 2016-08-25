@@ -76,12 +76,18 @@
   become: yes
   notify: restart nginx
 
+- name: create public/assets dir
+  file: path='{{ redmine_root_dir }}/public/assets'
+        state=directory
+        owner='{{ redmine_owner }}'
+        mode=0755
+  become: yes
+
 - name: install custom login background image
   copy: dest='{{ redmine_root_dir }}/public/assets/{{ easyredmine_login_bg_img }}'
         src='{{ easyredmine_login_bg_img }}'
         owner='{{ redmine_owner }}'
   become: yes
-  notify: restart nginx
 
 - name: restrict config permissions
   file: path='{{ redmine_root_dir }}/config'
