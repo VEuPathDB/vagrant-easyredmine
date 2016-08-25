@@ -64,14 +64,21 @@
   become: no
 
 - name: install ebrc_settings.rake
-  copy: dest='/opt/easyredmine/lib/tasks/ebrc_settings.rake'
+  copy: dest='{{ redmine_root_dir }}/lib/tasks/ebrc_settings.rake'
         src='ebrc_settings.rake'
         owner='{{ redmine_owner }}'
   become: yes
 
 - name: install additional_environment.rb
-  copy: dest='/opt/easyredmine/config/additional_environment.rb'
+  copy: dest='{{ redmine_root_dir }}/config/additional_environment.rb'
         src='additional_environment.rb'
+        owner='{{ redmine_owner }}'
+  become: yes
+  notify: restart nginx
+
+- name: install custom login background image
+  copy: dest='{{ redmine_root_dir }}/public/assets/{{ easyredmine_login_bg_img }}'
+        src='{{ easyredmine_login_bg_img }}'
         owner='{{ redmine_owner }}'
   become: yes
   notify: restart nginx
