@@ -1,20 +1,49 @@
 server {
   listen 80;
-  {% if is_production_vm %}
+  {%- if is_production_vm %}
   server_name redmine.apidb.org;
-  {% else %}
+  {%- else %}
   server_name {{ ansible_fqdn }};
-  {% endif %}
+  {%- endif %}
   return 301 https://$host$request_uri;
 }
 
 server {
   listen 443;
-  {% if is_production_vm %}
+  {%- if is_production_vm %}
   server_name redmine.apidb.org;
-  {% else %}
+  {%- else %}
   server_name {{ ansible_fqdn }};
-  {% endif %}
+  {%- endif %}
+
+  ssl    on;
+  ssl_certificate     /etc/pki/tls/certs/{{ ansible_fqdn }}.pem;
+  ssl_certificate_key /etc/pki/tls/certs/{{ ansible_fqdn }}.pem;
+
+  # take site offline for maintenance with
+  # sudo cp /usr/share/nginx/html/easyredmine/maintenance.html_ /usr/share/nginx/html/easyredmine/maintenance.html
+  if (-f /usr/share/nginx/html/easyredmine/maintenance.html) {
+    return 503;
+  }
+  error_page 503 @maintenance;
+  location @maintenance {
+    root /usr/share/nginx/html;
+    rewrite ^(.*)$ /easyredmine/maintenance.html break;
+  }
+
+  root {{ redmine_root_dir }}/public;
+  passenger_enabled on;
+  client_max_body_size 50M;
+}
+
+# alt. name for inspecting site during public downtime
+server {
+  listen 443;
+  {%- if is_production_vm %}
+  server_name maint.redmine.apidb.org;
+  {%- else %}
+  server_name maint.{{ ansible_fqdn }};
+  {%- endif %}
 
   ssl    on;
   ssl_certificate     /etc/pki/tls/certs/{{ ansible_fqdn }}.pem;
