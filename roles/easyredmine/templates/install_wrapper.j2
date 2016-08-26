@@ -5,8 +5,7 @@
 
 set timeout -1
 
-# spawn ~/bin/redmine install {{ remote_scratch_path }}/easyredmine_package_u2072_d201511101601.zip
-spawn redmine install {{ remote_scratch_path }}/easyredmine_package_u2072_d201511101601.zip
+spawn redmine install {{ remote_scratch_path }}/{{ installer_package_name }}
 
 expect -re {[\r\n]+Path for redmine_root}
 send "{{ redmine_root_dir }}\r"
@@ -70,7 +69,7 @@ expect {
 #
 # expect -re {[\r\n]+User_name:}
 # send "{{ smtp_username }}\r"
-# 
+#
 # expect -re {[\r\n]+Password:}
 # send "{{ smtp_password }}\r"
 
