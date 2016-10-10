@@ -147,3 +147,9 @@
         job="({{ redmine_root_dir }}/script/redmine_fetch_changesets 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_fetch_changesets"
         user='{{ redmine_owner }}'
   become: yes
+
+- name: adding logrotate
+  template: dest='/etc/logrotate.d/redmine'
+            src=redmine_logrotate.j2
+            mode=0644
+  become: yes

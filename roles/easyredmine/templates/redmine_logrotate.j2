@@ -1,0 +1,9 @@
+{{ redmine_root_dir }}/log/*.log {
+	su {{ redmine_owner }} {{ redmine_owner }}
+	daily
+	missingok
+	rotate 7
+	compress
+	notifempty
+	copytruncate
+}
