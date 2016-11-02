@@ -31,7 +31,7 @@ smtp_username: smtpuser
 smtp_password: smtppassword
 smtp_authentication: plain
 smtp_enable_starttls: true
-swap_add_mb: 500
+swap_add_mb: 512
 ruby_version: 2.1.3
 is_production_vm: False
 redmine_files_nfs_mount: ''  # /mnt/redminefiles
