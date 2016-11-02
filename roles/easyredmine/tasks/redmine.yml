@@ -69,6 +69,12 @@
         owner='{{ redmine_owner }}'
   become: yes
 
+- name: install ebrc_tasks.rake
+  copy: dest='{{ redmine_root_dir }}/lib/tasks/ebrc_tasks.rake'
+        src='ebrc_tasks.rake'
+        owner='{{ redmine_owner }}'
+  become: yes
+
 - name: install additional_environment.rb
   copy: dest='{{ redmine_root_dir }}/config/additional_environment.rb'
         src='additional_environment.rb'
