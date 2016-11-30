@@ -6,7 +6,7 @@ cd {{ redmine_root_dir }}
     redmine:email:receive_imap \
     RAILS_ENV="production" \
     project=sysdba \
-    allow_override=project,tracker,priority,category,status \
+    allow_override=project,assigned_to,tracker,priority,category,status \
     host=imap.gmail.com \
     port=993 ssl=SSL  \
     username={{ smtp_username }} \
