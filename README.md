@@ -24,10 +24,11 @@ Once provisioned, Redmine should be available at http://redmine.vm.apidb.org/
         vagrant install landrush
 
 - `scratch/redmine_dump.sql.gz` - a mysql dump of our production
-database.  _(One of the daily backups on our production Redmine server
-is suitable. See `/var/lib/mysql.backups/daily/easyredmine/`.)_ This is
-optional. To have the redmine installer create an empty database, set
-`do_redmine_db_import` to `False` in `config.yml`
+database.  _(One of the daily backups on is suitable. See
+`/var/lib/mysql.backups/daily/easyredmine/` on the server that hosts the
+Redmine database.)_ This is optional. To have the redmine installer
+create an empty database, set `do_redmine_db_import` to `False` in
+`config.yml`
 
 - `scratch/easyredmine_package_u2072_d201511101601.zip` - the
 installation package provided by EasyRedmine (downloaded from their
