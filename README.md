@@ -15,12 +15,6 @@ Once provisioned, Redmine should be available at http://redmine.vm.apidb.org/
 
 - Ansible [installed on your local host](http://docs.ansible.com/ansible/intro_installation.html)
 
-- `rvm_io.ruby` Ansible module installed on your local host
-
-        $ ansible-galaxy install rvm_io.ruby
-        $ ansible-galaxy install rvm_io.ruby --roles-path=roles/
-
-
 - Vagrant `landrush` plugin
 
         vagrant install landrush
