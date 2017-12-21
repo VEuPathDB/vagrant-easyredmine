@@ -9,6 +9,10 @@ with an empty database.
 
 Once provisioned, Redmine should be available at http://redmine.vm.apidb.org/
 
+If you choose to install an empty database (not import from existing
+database dump), the initial login/password is `admin/admin`. You will be
+prompted to change the password on first access.
+
 ## Requirements
 
 - Vagrant installed on your local host
