@@ -15,9 +15,11 @@ Once provisioned, Redmine should be available at http://redmine.vm.apidb.org/
 
 - Ansible [installed on your local host](http://docs.ansible.com/ansible/intro_installation.html)
 
-- `rvm1-ansible` Ansible module installed on your local host
+- `rvm_io.ruby` Ansible module installed on your local host
 
-        $ ansible-galaxy install rvm_io.rvm1-ruby
+        $ ansible-galaxy install rvm_io.ruby
+        $ ansible-galaxy install rvm_io.ruby --roles-path=roles/
+
 
 - Vagrant `landrush` plugin
 
@@ -42,8 +44,6 @@ does local authentication, so no VPN is needed in such case.
 
 ## Provisioning
 
-Start the virtual machine with `vagrant up`.
-
 Vagrant provisions the VM using Ansible. See
 `config.yml` for configuration options. Especially,
 
@@ -64,6 +64,9 @@ that the expect script is not expecting. This causes the installer to
 hang indefinitely waiting for input that the non-interactive script
 cannot provide. The `~/install.log` captures the stdout of the process
 and should be consulted to check for running state.
+
+Start the virtual machine with `vagrant up`. This boots the VM and
+starts provisioning.
 
 ## Production Installation
 

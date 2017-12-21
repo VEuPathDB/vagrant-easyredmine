@@ -23,6 +23,8 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision 'deploy', type: 'ansible' do |ansible|
     ansible.playbook = 'playbook.yml'
+    ansible.galaxy_role_file = 'requirements.yml'
+    ansible.galaxy_roles_path = 'roles'
   end
 
 end

@@ -1,5 +1,5 @@
 
-- include: addswap.yml
+- import_tasks: addswap.yml
 
 - name: install system tools
   yum: name='{{ item }}'

@@ -1,12 +1,13 @@
 ---
 - hosts: all
   become: yes
-  gather_facts: True
+  gather_facts: yes
   vars_files:
     - config.yml
 
   roles:
-    - { role: rvm_io.rvm1-ruby, tags: ruby, become: True }
+    - { role: rvm_io.ruby, tags: ruby, become: yes }
+    - { role: rvm_io.ruby.patch, tags: ruby, become: yes }
     - { role: easyredmine, become: no }
 
   tasks:

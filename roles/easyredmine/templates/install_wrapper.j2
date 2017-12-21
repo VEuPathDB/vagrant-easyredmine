@@ -4,20 +4,23 @@
 # non-interactive installs by Ansible
 
 set timeout -1
+set KEYUP "\x1B\[A"
+set KEYDOWN "\x1B\[B"
 
 spawn redmine install {{ remote_scratch_path }}/{{ installer_package_name }}
 
-expect -re {[\r\n]+Path for redmine_root}
+expect -re {[\r\n]+Path .+ redmine[\s_]root}
 send "{{ redmine_root_dir }}\r"
 
-# Database Configuration
-expect -re {[\r\n]+> }
-send "1\r"; # MySQL
+# Database Configuration (arrow-key navigation menu)
+expect -re {What database do you want use}
+send "\r"; # MySQL
 
-expect -re {[\r\n]+Database: }
+# no [\n\r] follows the arrow-key navigation menu
+expect -re {[\r\n]*Database: }
 send "{{ redmine_db_name }}\r"
 
-expect -re {[\r\n]+Host }
+expect -re {[\r\n]+Host: }
 send  "{{ redmine_db_host }}\r"
 
 expect -re {[\r\n]+Username:}
@@ -32,49 +35,33 @@ send "{{ redmine_db_encoding }}\r"
 expect -re {[\r\n]+Port}
 send "{{ redmine_db_port }}\r"
 
-# Email sending configuration
-expect -re {[\r\n]+> }
-send "3\r"; # SMTP from scratch
+# Email sending configuration (arrow-key navigation menu)
+expect -re {Which service to use for email sending}
+send "${KEYUP}${KEYUP}${KEYUP}\r"; # SMTP from scratch
 
-expect -re {[\r\n]+Address:}
-send "{{ smtp_address }}\r"
-
-expect -re {[\r\n]+Port }
-send "{{ smtp_port }}\r"
-
-expect -re {[\r\n]+Domain: }
-send "{{ smtp_domain }}\r"
-
-expect -re {[\r\n]+User_name:}
+# no [\n\r] follows the arrow-key navigation menu
+expect -re {[\r\n]*Username:}
 send "{{ smtp_username }}\r"
 
 expect -re {[\r\n]+Password:}
 send "{{ smtp_password }}\r"
 
+expect -re {[\r\n]+Address:}
+send "{{ smtp_address }}\r"
+
+expect -re {[\r\n]+Port:}
+send "{{ smtp_port }}\r"
+
+expect -re {[\r\n]+Domain: }
+send "{{ smtp_domain }}\r"
+
 expect -re {[\r\n]+Authentication:}
 send "{{ smtp_authentication }}\r"
 
-expect -re {[\r\n]+Enable_starttls_auto:}
-send "{{ smtp_enable_starttls }}\r"
+expect -re {[\r\n]+Openssl verify mode:}
+send "{{ smtp_openssl_verify_mode }}\r"
 
-expect {
-  -re {[\r\n]+-- } {exp_continue}
-  -re {[\r\n]+Do you want repeat this command?} {send "yes\n"; exp_continue}
-  -re {[\r\n]+Done.}
-}
+expect -re {[\r\n]+Enable starttls}
+send "Y\r"
 
-# # Email sending configuration
-# expect -re {[\r\n]+> }
-# send "1\r"; # GMail
-#
-# expect -re {[\r\n]+User_name:}
-# send "{{ smtp_username }}\r"
-#
-# expect -re {[\r\n]+Password:}
-# send "{{ smtp_password }}\r"
-
-# What web-server do you want
-expect -re {[\r\n]+> }
-send "4\r"; # Passenger (nginx)
-
-interact
+expect "Redmine was installed"
