@@ -1,8 +1,10 @@
-- get_url: url=https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
-           dest=/etc/yum.repos.d/passenger.repo
+- get_url:
+    url: https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
+    dest: /etc/yum.repos.d/passenger.repo
   become: yes
 
-- rpm_key: key=https://packagecloud.io/gpg.key
+- rpm_key:
+    key: https://packagecloud.io/gpg.key
   become: yes
 
 # this makecache is mostly because I can not find any other way to fully
@@ -14,17 +16,20 @@
   become: yes
   changed_when: False
 
-- yum: name=epel-release
+- yum:
+    name: epel-release
   become: yes
 
 - name: install nginx, passenger
-  yum: name='{{ item }}'
+  yum:
+    name: '{{ item }}'
   become: yes
   with_items:
     - nginx
     - passenger
 
-- stat: path='{{ dharam_pem_path }}'
+- stat:
+    path: '{{ dharam_pem_path }}'
   register: dharam_pem
 
 # https://michael.lustfield.net/nginx/getting-a-perfect-ssl-labs-score
@@ -34,27 +39,32 @@
   notify: restart nginx
   when: dharam_pem.stat.exists == False
 
-- template: dest='/etc/nginx/conf.d/easyredmine.conf'
-            src=easyredmine.conf.j2
+- template:
+    dest: '/etc/nginx/conf.d/easyredmine.conf'
+    src: easyredmine.conf.j2
   become: yes
   notify: restart nginx
 
-- template: dest='/etc/nginx/nginx.conf'
-            src=nginx.conf.j2
+- template:
+    dest: '/etc/nginx/nginx.conf'
+    src: nginx.conf.j2
   become: yes
   notify: restart nginx
 
-- template: dest=/etc/nginx/conf.d/passenger.conf
-            src=passenger.conf.j2
+- template:
+    dest: /etc/nginx/conf.d/passenger.conf
+    src: passenger.conf.j2
   become: yes
   notify: restart nginx
 
-- copy: dest='/etc/pki/tls/certs/{{ ansible_fqdn }}.pem'
-        src='{{ nginx_pem }}'
+- copy:
+    dest: '/etc/pki/tls/certs/{{ ansible_fqdn }}.pem'
+    src: '{{ nginx_pem }}'
   become: yes
   notify: restart nginx
 
-- service: name=nginx
-           state=started
-           enabled=yes
+- service:
+    name: nginx
+    state: started
+    enabled: yes
   become: yes

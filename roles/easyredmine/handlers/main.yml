@@ -2,13 +2,15 @@
 # handlers file for easyredmine
 
 - name: restart nginx
-  service: name=nginx
-           state=restarted
+  service:
+    name: nginx
+    state: restarted
   become: yes
 
 - name: restart firewalld
-  service: name=firewalld
-           state=restarted
+  service:
+    name: firewalld
+    state: restarted
   become: yes
 
 - name: rebuild mail aliases

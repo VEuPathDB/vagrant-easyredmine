@@ -1,24 +1,28 @@
 
-- service: name=firewalld
-           state=started
-           enabled=yes
+- service:
+    name: firewalld
+    state: started
+    enabled: yes
   become: yes
 
-- firewalld: service=https
-             permanent=true
-             state=enabled
-  become: yes
-  notify: restart firewalld
-
-- firewalld: service=http
-             permanent=true
-             state=enabled
+- firewalld:
+    service: https
+    permanent: true
+    state: enabled
   become: yes
   notify: restart firewalld
 
-- firewalld: rich_rule='rule service name="ssh" family="ipv4" source address="{{ item }}" accept'
-             permanent=true
-             state=enabled
+- firewalld:
+    service: http
+    permanent: true
+    state: enabled
+  become: yes
+  notify: restart firewalld
+
+- firewalld:
+    rich_rule: 'rule service name="ssh" family="ipv4" source address="{{ item }}" accept'
+    permanent: true
+    state: enabled
   with_items:
     - 128.192.75.0/24
     - 192.168.0.0/16
@@ -28,16 +32,18 @@
   notify: restart firewalld
   when: is_production_vm == True
 
-- firewalld: service=ssh
-             permanent=true
-             state=disabled
+- firewalld:
+    service: ssh
+    permanent: true
+    state: disabled
   become: yes
   notify: restart firewalld
   when: is_production_vm == True
 
 - name: define new icmp types for timestamp responses
-  copy: dest='/etc/firewalld/icmptypes/{{ item }}.xml'
-        src='{{ item }}.xml'
+  copy:
+    dest: '/etc/firewalld/icmptypes/{{ item }}.xml'
+    src: '{{ item }}.xml'
   become: yes
   with_items:
     - timestamp-reply
@@ -56,6 +62,7 @@
   notify: restart firewalld
 
 - name: restart firewalld
-  service: name=firewalld
-           state=restarted
+  service:
+    name: firewalld
+    state: restarted
   become: yes

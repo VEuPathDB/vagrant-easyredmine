@@ -5,9 +5,9 @@ redmine_uid: ''
 redmine_owner_ssh_pub_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEAvijH8y7CL9TxWCucjgXRa2q3l0Nc9JW7/SAFHVgt/FYClenS0DMN0nGm1I4z2mtftt8gHz5f6PNqyvfc3F0JcOqiuH9qP79FQ6c8rDmqQEqOuBrufPX11y/9IESIJ0aQ5feQP+WooR6bo/O7BFJS005S3foA/iLphf+smLrW44k= mheiges@sapote.local
   - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBKXyFF/K1AT52FGrq5Z27guGgHDELy8W8NInAgrDQZQP+U5ORs9wB8SsuD8vyhYy3G2Tz8xAKCxWcFHvuNDv4VIg8D6ge7VMdWHGtbS8UC153dK3mMQ+CMTgJsezqgk0j4/ot7LaQ6yurb8t27TOHeqEdHyB5O/eL6pYntsKqEWQ== mguidry@uga.edu
-do_database_management: True
-do_redmine_db_import: True # no import unless do_database_management is also true
-do_redmine_installer: True
+do_database_management: yes
+do_redmine_db_import: yes # no import unless do_database_management is also yes
+do_redmine_installer: yes
 remote_scratch_path: /vagrant/scratch
 nginx_pem: redmine.vm-rsa.pem
 installer_package_name: easyredmine_2016_stable_u2072_v2016_08_08___2018_00_08_.zip
@@ -30,11 +30,11 @@ smtp_domain: smtpdomain
 smtp_username: smtpuser
 smtp_password: smtppassword
 smtp_authentication: plain
-smtp_enable_starttls: true
+smtp_enable_starttls: yes
 smtp_openssl_verify_mode: peer
 swap_add_mb: 512
 ruby_version: 2.4.1
-is_production_vm: False
+is_production_vm: no
 redmine_files_nfs_mount: ''  # /mnt/redminefiles
 redmine_files_nfs_source: '' # 171.26.20.75:/srv/easyredmine
 _redmine_db_import_file: /tmp/redmine_dump.sql
@@ -46,5 +46,5 @@ rvm1_rubies:
   - 'ruby-{{ ruby_version }}'
 rvm1_bundler_install: yes
 rvm1_install_path: '/home/{{ redmine_owner }}/.rvm'
-rvm1_rvm_check_for_updates: False
+rvm1_rvm_check_for_updates: no
 rvm1_user: '{{ redmine_owner }}'

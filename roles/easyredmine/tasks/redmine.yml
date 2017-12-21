@@ -1,5 +1,6 @@
 - name: install redmine package depdendencies
-  yum: name='{{ item }}'
+  yum:
+    name: '{{ item }}'
   become: yes
   with_items:
     - mysql-devel
@@ -17,45 +18,51 @@
 # these gems are not user_install but the RVM path is for local redmine
 # user so installations are localized to rvm1_install_path (e.g. ~/.rvm)
 - name: install redmine-installer gem in selected RVM environment
-  gem: name='{{ item.name }}'
-       user_install=no
-       version='{{ item.version }}'
-       executable='{{ rvm1_install_path }}/wrappers/default/gem' # RVM's version
+  gem:
+    name: '{{ item.name }}'
+    user_install: no
+    version: '{{ item.version }}'
+    executable: '{{ rvm1_install_path }}/wrappers/default/gem' # RVM's version
   become: no
   with_items:
     - { name: redmine-installer, version: '' }
 
 - name: installer package is present?
-  stat: path='{{ installer_package_path }}'
+  stat:
+    path: '{{ installer_package_path }}'
   register: has_installer_package
   become: no
   changed_when: false
 
 - name: download installer
-  get_url: url='{{ installer_package_url }}'
-           dest='{{ remote_scratch_path }}'
-           mode=0640
-           force=no
+  get_url:
+    url: '{{ installer_package_url }}'
+    dest: '{{ remote_scratch_path }}'
+    mode: 0640
+    force: no
   when: has_installer_package.stat.exists == False
   become: no
 
 - name: add redmine installation wrapper script
-  template: dest='{{ _redmine_install_wrapper }}'
-            src=install_wrapper.j2
-            mode=750
+  template:
+    dest: '{{ _redmine_install_wrapper }}'
+    src: install_wrapper.j2
+    mode: 0750
   become: no
 
 - name: delete contents of redmine root directory
-  file: path='{{ redmine_root_dir }}'
-        state=absent
+  file:
+    path: '{{ redmine_root_dir }}'
+    state: absent
   become: yes
   when: redmine_db_created is defined and redmine_db_created|changed
 
 - name: make installation directory
-  file: path='{{ redmine_root_dir }}'
-        state=directory
-        owner='{{ redmine_owner }}'
-        mode=755
+  file:
+    path: '{{ redmine_root_dir }}'
+    state: directory
+    owner: '{{ redmine_owner }}'
+    mode: 0755
   become: yes
   register: mk_redmine_root_dir
 
@@ -66,55 +73,63 @@
   become: no
 
 - name: install ebrc_settings.rake
-  copy: dest='{{ redmine_root_dir }}/lib/tasks/ebrc_settings.rake'
-        src='ebrc_settings.rake'
-        owner='{{ redmine_owner }}'
+  copy:
+    dest: '{{ redmine_root_dir }}/lib/tasks/ebrc_settings.rake'
+    src: 'ebrc_settings.rake'
+    owner: '{{ redmine_owner }}'
   become: yes
 
 - name: install ebrc_tasks.rake
-  copy: dest='{{ redmine_root_dir }}/lib/tasks/ebrc_tasks.rake'
-        src='ebrc_tasks.rake'
-        owner='{{ redmine_owner }}'
+  copy:
+    dest: '{{ redmine_root_dir }}/lib/tasks/ebrc_tasks.rake'
+    src: 'ebrc_tasks.rake'
+    owner: '{{ redmine_owner }}'
   become: yes
 
 - name: install additional_environment.rb
-  copy: dest='{{ redmine_root_dir }}/config/additional_environment.rb'
-        src='additional_environment.rb'
-        owner='{{ redmine_owner }}'
+  copy:
+    dest: '{{ redmine_root_dir }}/config/additional_environment.rb'
+    src: 'additional_environment.rb'
+    owner: '{{ redmine_owner }}'
   become: yes
   notify: restart nginx
 
 - name: create public/assets dir
-  file: path='{{ redmine_root_dir }}/public/assets'
-        state=directory
-        owner='{{ redmine_owner }}'
-        mode=0755
+  file:
+    path: '{{ redmine_root_dir }}/public/assets'
+    state: directory
+    owner: '{{ redmine_owner }}'
+    mode: 0755
   become: yes
 
 - name: install custom login background image
-  copy: dest='{{ item }}'
-        src='{{ easyredmine_login_bg_img }}'
-        owner='{{ redmine_owner }}'
+  copy:
+    dest: '{{ item }}'
+    src: '{{ easyredmine_login_bg_img }}'
+    owner: '{{ redmine_owner }}'
   with_items:
     - '{{ redmine_root_dir }}/public/plugin_assets/easy_extensions/images/login-bg.jpg'
     - '{{ redmine_root_dir }}/public/assets/{{ easyredmine_login_bg_img }}'
   become: yes
 
 - name: create maintenance dir
-  file: path='/usr/share/nginx/html/easyredmine'
-        state=directory
-        owner='{{ redmine_owner }}'
-        mode=0755
+  file:
+    path: '/usr/share/nginx/html/easyredmine'
+    state: directory
+    owner: '{{ redmine_owner }}'
+    mode: 0755
   become: yes
 - name: install maintenance.html
-  copy: dest=/usr/share/nginx/html/easyredmine/maintenance.html_
-        src=maintenance.html_
-        owner='{{ redmine_owner }}'
+  copy:
+    dest: /usr/share/nginx/html/easyredmine/maintenance.html_
+    src: maintenance.html_
+    owner: '{{ redmine_owner }}'
   become: yes
 
 - name: restrict config permissions
-  file: path='{{ redmine_root_dir }}/config'
-        mode=0770
+  file:
+    path: '{{ redmine_root_dir }}/config'
+    mode: 0770
 
 - name: Configuring Redmine with eupath preferences
   command: 'rake redmine:ebrc_settings RAILS_ENV=production'
@@ -124,40 +139,46 @@
   when: do_redmine_installer == True
 
 - name: adding run_tasks crontab
-  cron: name="redmine tasks"
-        minute="*/15"
-        job='cd {{ redmine_root_dir }} && {{ rvm1_install_path }}/wrappers/default/bundle exec rake easyproject:scheduler:run_tasks RAILS_ENV=production > /dev/null'
-        user='{{ redmine_owner }}'
+  cron:
+    name: "redmine tasks"
+    minute: "*/15"
+    job: 'cd {{ redmine_root_dir }} && {{ rvm1_install_path }}/wrappers/default/bundle exec rake easyproject:scheduler:run_tasks RAILS_ENV=production > /dev/null'
+    user: '{{ redmine_owner }}'
   become: yes
 
 - name: add redmine IMAP fetch script
-  template: dest='{{ redmine_root_dir }}/script/redmine_receive_imap'
-            src=redmine_receive_imap.j2
-            mode=750
+  template:
+    dest: '{{ redmine_root_dir }}/script/redmine_receive_imap'
+    src: redmine_receive_imap.j2
+    mode: 0750
   become: no
 
 - name: add redmine repository fetch script
-  template: dest='{{ redmine_root_dir }}/script/redmine_fetch_changesets'
-            src=redmine_fetch_changesets.j2
-            mode=750
+  template:
+    dest: '{{ redmine_root_dir }}/script/redmine_fetch_changesets'
+    src: redmine_fetch_changesets.j2
+    mode: 0750
   become: no
 
 - name: adding redmine_receive_imap crontab
-  cron: name="fetch from imap"
-        minute="*/5"
-        job="({{ redmine_root_dir }}/script/redmine_receive_imap 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_receive_imap"
-        user='{{ redmine_owner }}'
+  cron:
+    name: "fetch from imap"
+    minute: "*/5"
+    job: "({{ redmine_root_dir }}/script/redmine_receive_imap 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_receive_imap"
+    user: '{{ redmine_owner }}'
   become: yes
 
 - name: adding redmine_fetch_changesets crontab
-  cron: name="fetch from repository"
-        minute="*/5"
-        job="({{ redmine_root_dir }}/script/redmine_fetch_changesets 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_fetch_changesets"
-        user='{{ redmine_owner }}'
+  cron:
+    name: "fetch from repository"
+    minute: "*/5"
+    job: "({{ redmine_root_dir }}/script/redmine_fetch_changesets 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_fetch_changesets"
+    user: '{{ redmine_owner }}'
   become: yes
 
 - name: adding logrotate
-  template: dest='/etc/logrotate.d/redmine'
-            src=redmine_logrotate.j2
-            mode=0644
+  template:
+    dest: '/etc/logrotate.d/redmine'
+    src: redmine_logrotate.j2
+    mode: 0644
   become: yes

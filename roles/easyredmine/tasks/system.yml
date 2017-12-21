@@ -2,7 +2,8 @@
 - import_tasks: addswap.yml
 
 - name: install system tools
-  yum: name='{{ item }}'
+  yum:
+    name: '{{ item }}'
   become: yes
   with_items:
     - rsync
@@ -26,16 +27,17 @@
     - screen
     - mlocate
 
-- service: name=sendmail
-           state=started
-           enabled=yes
+- service:
+    name: sendmail
+    state: started
+    enabled: yes
   become: yes
 
 - name: set up redmine user mail aliases
-  lineinfile: >
-    dest=/etc/aliases
-    regexp="\b{{ redmine_owner }}"
-    line="{{ redmine_owner }}: {{ redmine_mail_alias }}"
+  lineinfile:
+    dest: /etc/aliases
+    regexp: "^{{ redmine_owner }}"
+    line: "{{ redmine_owner }}: {{ redmine_mail_alias }}"
   become: yes
   notify: rebuild mail aliases
 
