@@ -7,6 +7,7 @@
     - unzip
     - rubygems
     - ruby-devel
+    - libuuid-devel
     - zlib-devel
     - openssl-devel
     - gcc-c++
@@ -77,6 +78,7 @@
     dest: '{{ redmine_root_dir }}/lib/tasks/ebrc_settings.rake'
     src: 'ebrc_settings.rake'
     owner: '{{ redmine_owner }}'
+  when: do_redmine_installer == True
   become: yes
 
 - name: install ebrc_tasks.rake
@@ -84,6 +86,7 @@
     dest: '{{ redmine_root_dir }}/lib/tasks/ebrc_tasks.rake'
     src: 'ebrc_tasks.rake'
     owner: '{{ redmine_owner }}'
+  when: do_redmine_installer == True
   become: yes
 
 - name: install additional_environment.rb
@@ -92,6 +95,7 @@
     src: 'additional_environment.rb'
     owner: '{{ redmine_owner }}'
   become: yes
+  when: do_redmine_installer == True
   notify: restart nginx
 
 - name: create public/assets dir
@@ -100,6 +104,7 @@
     state: directory
     owner: '{{ redmine_owner }}'
     mode: 0755
+  when: do_redmine_installer == True
   become: yes
 
 - name: install custom login background image
@@ -110,6 +115,7 @@
   with_items:
     - '{{ redmine_root_dir }}/public/plugin_assets/easy_extensions/images/login-bg.jpg'
     - '{{ redmine_root_dir }}/public/assets/{{ easyredmine_login_bg_img }}'
+  when: do_redmine_installer == True
   become: yes
 
 - name: create maintenance dir
@@ -130,6 +136,7 @@
   file:
     path: '{{ redmine_root_dir }}/config'
     mode: 0770
+  when: do_redmine_installer == True
 
 - name: Configuring Redmine with eupath preferences
   command: 'rake redmine:ebrc_settings RAILS_ENV=production'
@@ -144,6 +151,7 @@
     minute: "*/15"
     job: 'cd {{ redmine_root_dir }} && {{ rvm1_install_path }}/wrappers/default/bundle exec rake easyproject:scheduler:run_tasks RAILS_ENV=production > /dev/null'
     user: '{{ redmine_owner }}'
+  when: do_redmine_installer == True
   become: yes
 
 - name: add redmine IMAP fetch script
@@ -151,6 +159,7 @@
     dest: '{{ redmine_root_dir }}/script/redmine_receive_imap'
     src: redmine_receive_imap.j2
     mode: 0750
+  when: do_redmine_installer == True
   become: no
 
 - name: add redmine repository fetch script
@@ -158,6 +167,7 @@
     dest: '{{ redmine_root_dir }}/script/redmine_fetch_changesets'
     src: redmine_fetch_changesets.j2
     mode: 0750
+  when: do_redmine_installer == True
   become: no
 
 - name: adding redmine_receive_imap crontab

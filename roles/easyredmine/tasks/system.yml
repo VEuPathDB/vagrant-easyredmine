@@ -27,7 +27,8 @@
     - screen
     - mlocate
 
-- service:
+- name: manage sendmail service
+  service:
     name: sendmail
     state: started
     enabled: yes

@@ -7,12 +7,14 @@
 # Be sure the UID for the redmine user matches with the
 # NFS server
 
-- file:
+- name: ensure NFS mount dir for Redmine files
+  file:
     path: '{{ redmine_files_nfs_mount }}'
     state: directory
   become: yes
 
-- mount:
+- name: mount dir for Redmine files
+  mount:
     name: '{{ redmine_files_nfs_mount }}'
     src: '{{ redmine_files_nfs_source }}'
     fstype: nfs

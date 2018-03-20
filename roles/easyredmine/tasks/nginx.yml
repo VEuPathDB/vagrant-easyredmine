@@ -1,9 +1,11 @@
-- get_url:
+- name: set up Passenger YUM repo
+  get_url:
     url: https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
     dest: /etc/yum.repos.d/passenger.repo
   become: yes
 
-- rpm_key:
+- name: install gpg key for Passenger YUM repo
+  rpm_key:
     key: https://packagecloud.io/gpg.key
   become: yes
 
@@ -12,11 +14,13 @@
 # sufficient.
 # The use of /usr/bin/env is a hack to avoid Ansible's "Consider using
 # yum module..." warnings when it sees 'yum' as the primary command.
-- command: /usr/bin/env yum -q makecache -y --disablerepo='*' --enablerepo='passenger*'
+- name: yum makecache
+  command: /usr/bin/env yum -q makecache -y --disablerepo='*' --enablerepo='passenger*'
   become: yes
   changed_when: False
 
-- yum:
+- name: install epel-release
+  yum:
     name: epel-release
   become: yes
 
@@ -28,7 +32,8 @@
     - nginx
     - passenger
 
-- stat:
+- name: check for dharam pem file
+  stat:
     path: '{{ dharam_pem_path }}'
   register: dharam_pem
 
@@ -39,31 +44,36 @@
   notify: restart nginx
   when: dharam_pem.stat.exists == False
 
-- template:
+- name: install easyredmine.conf to Nginx 
+  template:
     dest: '/etc/nginx/conf.d/easyredmine.conf'
     src: easyredmine.conf.j2
   become: yes
   notify: restart nginx
 
-- template:
+- name: install nginx.conf to Nginx
+  template:
     dest: '/etc/nginx/nginx.conf'
     src: nginx.conf.j2
   become: yes
   notify: restart nginx
 
-- template:
+- name: install passenger.conf to Nginx
+  template:
     dest: /etc/nginx/conf.d/passenger.conf
     src: passenger.conf.j2
   become: yes
   notify: restart nginx
 
-- copy:
+- name: install TLS cert
+  copy:
     dest: '/etc/pki/tls/certs/{{ ansible_fqdn }}.pem'
     src: '{{ nginx_pem }}'
   become: yes
   notify: restart nginx
 
-- service:
+- name: manage Nginx service
+  service:
     name: nginx
     state: started
     enabled: yes

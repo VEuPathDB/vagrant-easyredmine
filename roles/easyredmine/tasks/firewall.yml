@@ -1,25 +1,29 @@
 
-- service:
+- name: manage firewalld service
+  service:
     name: firewalld
     state: started
     enabled: yes
   become: yes
 
-- firewalld:
+- name: enable https in firewalld
+  firewalld:
     service: https
     permanent: true
     state: enabled
   become: yes
   notify: restart firewalld
 
-- firewalld:
+- name: enable http in firewalld
+  firewalld:
     service: http
     permanent: true
     state: enabled
   become: yes
   notify: restart firewalld
 
-- firewalld:
+- name: enable ssh rule in firewalld
+  firewalld:
     rich_rule: 'rule service name="ssh" family="ipv4" source address="{{ item }}" accept'
     permanent: true
     state: enabled
@@ -32,7 +36,8 @@
   notify: restart firewalld
   when: is_production_vm == True
 
-- firewalld:
+- name: disable ssh service in firewalld
+  firewalld:
     service: ssh
     permanent: true
     state: disabled
