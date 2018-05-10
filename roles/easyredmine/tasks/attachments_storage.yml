@@ -26,5 +26,5 @@
   lineinfile:
     dest: '{{ redmine_root_dir }}/config/configuration.yml'
     regexp: '\s*attachments_storage_path:'
-    line: '  attachments_storage_path: {{ redmine_files_nfs_mount }}'
+    line: '  attachments_storage_path: {{ redmine_files_nfs_mount }}/uploads'
   notify: restart nginx
