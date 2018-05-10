@@ -20,6 +20,11 @@
                       key='{{ item }}'
       with_items: "{{ redmine_owner_ssh_pub_keys }}"
 
+    - name: Set up authorized_keys for the root account
+      authorized_key: user='root'
+                      key='{{ item }}'
+      with_items: "{{ root_ssh_pub_keys }}"
+
     - name: Set up sudoers for the redmnine account
       template: dest='/etc/sudoers.d/10_{{ redmine_owner }}'
                 src=templates/sudoers.j2
