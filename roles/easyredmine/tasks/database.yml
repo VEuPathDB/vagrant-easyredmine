@@ -47,13 +47,13 @@
     login_user: '{{ mysql_admin_login }}'
     login_password: '{{ mysql_admin_password }}'
   register: redmine_db_import
-  when: do_redmine_db_import == True and (redmine_db_import_done.stat.exists == False or redmine_db_created|changed)
-  
+  when: do_redmine_db_import == True and (redmine_db_import_done.stat.exists == False or redmine_db_created is changed)
+
 - name: create successful database import file
   file:
     path: '{{ _redmine_db_import_success }}'
     state: touch
-  when: do_redmine_db_import == True and redmine_db_import_done.stat.exists == False and redmine_db_import|success 
+  when: do_redmine_db_import == True and redmine_db_import_done.stat.exists == False and redmine_db_import is success
 
 - name: create redmine db user
   mysql_user:

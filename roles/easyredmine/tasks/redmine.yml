@@ -56,7 +56,7 @@
     path: '{{ redmine_root_dir }}'
     state: absent
   become: yes
-  when: redmine_db_created is defined and redmine_db_created|changed
+  when: redmine_db_created is defined and redmine_db_created is changed
 
 - name: make installation directory
   file:
@@ -67,9 +67,9 @@
   become: yes
   register: mk_redmine_root_dir
 
-- name: run redmine installer
+- name: run redmine installer (`tail -f ~vagrant/install.log` on guest for status)
   shell: 'source ~/.bash_profile && {{ _redmine_install_wrapper }} > ~/install.log 2>&1'
-  when: mk_redmine_root_dir|changed and do_redmine_installer == True
+  when: mk_redmine_root_dir is changed and do_redmine_installer == True
   register: installer_run
   become: no
 
