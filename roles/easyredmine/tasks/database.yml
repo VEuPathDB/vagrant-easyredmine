@@ -59,4 +59,5 @@
     priv: '{{ redmine_db_name }}.*:ALL'
     state: present
   become: yes
+  no_log: yes
 
