@@ -1,4 +1,4 @@
-rvm_io.ruby.patch
+rvm.ruby.patch
 =========
 
 Patches to [rvm1-ansible](https://github.com/rvm/rvm1-ansible) role.
@@ -13,7 +13,7 @@ Including an example of how to use your role (for instance, with variables passe
 ```
     - hosts: servers
       roles:
-         - { role: rvm_io.ruby.patch }
+         - { role: rvm.ruby.patch }
 ```
 
 License

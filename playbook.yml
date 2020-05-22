@@ -6,8 +6,8 @@
     - config.yml
 
   roles:
-    - { role: rvm_io.ruby, tags: ruby, become: yes }
-    - { role: rvm_io.ruby.patch, tags: ruby, become: yes }
+    - { role: rvm.ruby, tags: ruby, become: yes }
+    - { role: rvm.ruby.patch, tags: ruby, become: yes }
     - { role: easyredmine, become: no }
 
   tasks:

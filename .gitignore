@@ -1,7 +1,7 @@
 production_inventory
 production_config.yml
 .DS_Store
-roles/rvm_io.ruby
+roles/rvm.ruby
 .vagrant
 scratch/*
 playbook.retry

@@ -1,5 +1,5 @@
 ---
-# tasks file for rvm_io.ruby.patch
+# tasks file for rvm.ruby.patch
 
 - copy:
     src: rvm.sh
