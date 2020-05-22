@@ -3,29 +3,12 @@
 
 - name: install system tools
   yum:
-    name: '{{ item }}'
+    name: ['rsync', 'strace', 'nmap', 'yum-utils', 'sendmail',
+           'nfs-utils', 'vim-enhanced', 'tmpwatch', 'ntpdate',
+           'at', 'cronie-noanacron', 'ruby', 'mailx', 'crontabs',
+           'logrotate', 'which', 'net-tools', 'lsof', 'screen',
+           'mlocate']
   become: yes
-  with_items:
-    - rsync
-    - strace
-    - nmap
-    - yum-utils
-    - sendmail
-    - at
-    - nfs-utils
-    - vim-enhanced
-    - tmpwatch
-    - ntpdate
-    - cronie-noanacron
-    - ruby
-    - mailx
-    - crontabs
-    - logrotate
-    - which
-    - net-tools
-    - lsof
-    - screen
-    - mlocate
 
 - name: manage sendmail service
   service:

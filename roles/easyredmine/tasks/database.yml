@@ -1,11 +1,7 @@
 - name: install mysql, mariadb packages
   yum:
-    name: '{{ item }}'
+    name: ['mysql-devel', 'mariadb-server', 'MySQL-python']
   become: yes
-  with_items:
-    - mysql-devel
-    - mariadb-server
-    - MySQL-python
 
 - name: manage MySql/MariaDB database service
   service:

@@ -1,20 +1,9 @@
 - name: install redmine package depdendencies
   yum:
-    name: '{{ item }}'
+    name: ['mysql-devel', 'unzip', 'rubygems', 'ruby-devel', 'libuuid-devel',
+           'zlib-devel', 'openssl-devel', 'gcc-c++', 'ImageMagick-devel',
+           'expect', 'subversion', 'git']
   become: yes
-  with_items:
-    - mysql-devel
-    - unzip
-    - rubygems
-    - ruby-devel
-    - libuuid-devel
-    - zlib-devel
-    - openssl-devel
-    - gcc-c++
-    - ImageMagick-devel
-    - expect # for install_wrapper
-    - subversion # Repository integration
-    - git # Repository integration
 
 # these gems are not user_install but the RVM path is for local redmine
 # user so installations are localized to rvm1_install_path (e.g. ~/.rvm)
