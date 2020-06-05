@@ -67,4 +67,7 @@ send "Y\r"
 expect -re {[\r\n]+Enable starttls}
 send "Y\r"
 
+expect -re {[\r\n]+Would you like to load default data?}
+send "N\r"
+
 expect "Redmine was installed"
