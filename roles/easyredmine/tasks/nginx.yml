@@ -26,11 +26,8 @@
 
 - name: install nginx, passenger
   yum:
-    name: '{{ item }}'
+    name: ['nginx', 'passenger', 'nginx-mod-http-passenger']
   become: yes
-  with_items:
-    - nginx
-    - passenger
 
 - name: check for dharam pem file
   stat:
@@ -44,7 +41,7 @@
   notify: restart nginx
   when: dharam_pem.stat.exists == False
 
-- name: install easyredmine.conf to Nginx 
+- name: install easyredmine.conf to Nginx
   template:
     dest: '/etc/nginx/conf.d/easyredmine.conf'
     src: easyredmine.conf.j2
