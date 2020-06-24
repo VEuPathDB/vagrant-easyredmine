@@ -84,3 +84,8 @@ import the dump file.
     mysql -u root --password='' -e "CREATE USER 'easyredmine'@'localhost' IDENTIFIED BY '@redmin3r'"
     mysql -u root --password='' -e "GRANT ALL PRIVILEGES ON easyredmine.* TO 'easyredmine'"
     zcat /vagrant/scratch/redmine_dump.sql.gz | mysql -u easyredmine -p'@redmin3r' easyredmine
+
+To set the local 'admin' account on an imported database to 'password'
+
+    mysql -u root --password='' -D easyredmine -e "UPDATE users SET hashed_password='353e8061f2befecb6818ba0c034c632fb0bcae1b' WHERE login='admin'"
+    mysql -u root --password='' -D easyredmine -e "UPDATE users SET salt='' WHERE login='admin'"
