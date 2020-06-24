@@ -36,7 +36,7 @@ smtp_authentication: plain
 smtp_enable_starttls: yes
 smtp_openssl_verify_mode: peer
 swap_add_mb: 512
-ruby_version: 2.4.1
+ruby_version: 2.7.1
 is_production_vm: no
 redmine_files_nfs_mount: ''  # /mnt/redminefiles
 redmine_files_nfs_source: '' # 171.26.20.75:/srv/easyredmine
