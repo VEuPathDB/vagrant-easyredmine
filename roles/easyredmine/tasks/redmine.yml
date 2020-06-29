@@ -148,7 +148,7 @@
     dest: '{{ redmine_root_dir }}/script/redmine_receive_imap'
     src: redmine_receive_imap.j2
     mode: 0750
-  when: do_redmine_installer == True
+  when: do_imap_fetch == True
   become: no
 
 - name: add redmine repository fetch script
@@ -165,6 +165,7 @@
     minute: "*/5"
     job: "({{ redmine_root_dir }}/script/redmine_receive_imap 2>&1 | sed '/install RDoc/d') >> {{ redmine_root_dir }}/log/redmine_receive_imap"
     user: '{{ redmine_owner }}'
+  when: do_imap_fetch == True
   become: yes
 
 - name: adding redmine_fetch_changesets crontab

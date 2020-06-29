@@ -11,6 +11,7 @@ root_ssh_pub_keys: '{{ redmine_owner_ssh_pub_keys }}'
 do_database_management: yes
 do_redmine_db_import: yes # no import unless do_database_management is also yes
 do_redmine_installer: yes
+do_imap_fetch: yes # install the redmine_receive_imap template script
 remote_scratch_path: /vagrant/scratch
 nginx_pem: redmine.vm-rsa.pem
 installer_package_name: easyredmine_2016_stable_u2072_vVersion_10_2_0.zip
