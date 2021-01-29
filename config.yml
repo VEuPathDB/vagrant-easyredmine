@@ -45,6 +45,10 @@ _redmine_db_import_file: /tmp/redmine_dump.sql
 _redmine_db_import_success: /tmp/redmine_db_import_success
 _redmine_install_wrapper: '/home/{{ redmine_owner }}/install_wrapper'
 
+firewall_addrs:
+  - 192.168.0.0/16
+  - 172.16.0.0/16
+
 # rvm1-ansible module vars
 rvm1_rubies:
   - 'ruby-{{ ruby_version }}'

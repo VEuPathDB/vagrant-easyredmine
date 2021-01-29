@@ -27,11 +27,7 @@
     rich_rule: 'rule service name="ssh" family="ipv4" source address="{{ item }}" accept'
     permanent: true
     state: enabled
-  with_items:
-    - 128.192.75.0/24
-    - 192.168.0.0/16
-    - 172.16.0.0/16
-    - 128.91.49.0/24
+  with_items: "{{ firewall_addrs }}"
   become: yes
   notify: restart firewalld
   when: is_production_vm == True
