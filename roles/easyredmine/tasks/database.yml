@@ -1,6 +1,20 @@
-- name: install mysql, mariadb packages
+- name: Download MariaDB installation script
+  get_url:
+    url: https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
+    dest: '{{ remote_scratch_path }}/mariadb_repo_setup'
+    mode: '0700'
+
+- name: Install MariaDB repo via script
+  shell: '{{ remote_scratch_path }}/mariadb_repo_setup'
+  args:
+    creates: /etc/yum.repos.d/mariadb.repo
+  become: yes
+
+- name: Install MariaDB
   yum:
-    name: ['mysql-devel', 'mariadb-server', 'MySQL-python']
+    name: ['mysql-devel', 'MariaDB-server', 'MySQL-python']
+    state: present
+    update_cache: yes
   become: yes
 
 - name: manage MySql/MariaDB database service
