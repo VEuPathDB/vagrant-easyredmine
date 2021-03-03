@@ -1,4 +1,4 @@
-- name: install redmine package depdendencies
+- name: install redmine package dependencies
   yum:
     name: ['mysql-devel', 'unzip', 'rubygems', 'ruby-devel', 'libuuid-devel',
            'zlib-devel', 'openssl-devel', 'gcc-c++', 'ImageMagick-devel',
