@@ -5,7 +5,7 @@ cd {{ redmine_root_dir }}
 [[ -s "{{ rvm1_install_path }}/scripts/rvm" ]] && \
   source "{{ rvm1_install_path }}/scripts/rvm"
 
-{{ rvm1_install_path }}/gems/ruby-{{ ruby_version }}/bin/bundle exec rake \
+{{ rvm1_install_path }}/rubies/ruby-{{ ruby_version }}/bin/bundle exec rake \
     redmine:email:receive_imap \
     RAILS_ENV="production" \
     project=sysdba \

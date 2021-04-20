@@ -68,6 +68,7 @@
     src: '{{ nginx_pem }}'
   become: yes
   notify: restart nginx
+  when: not is_production_vm
 
 - name: manage Nginx service
   service:
