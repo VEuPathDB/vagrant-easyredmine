@@ -96,17 +96,6 @@
   when: do_redmine_installer == True
   become: yes
 
-- name: install custom login background image
-  copy:
-    dest: '{{ item }}'
-    src: '{{ easyredmine_login_bg_img }}'
-    owner: '{{ redmine_owner }}'
-  with_items:
-    - '{{ redmine_root_dir }}/public/plugin_assets/easy_extensions/images/login-bg.jpg'
-    - '{{ redmine_root_dir }}/public/assets/{{ easyredmine_login_bg_img }}'
-  when: do_redmine_installer == True
-  become: yes
-
 - name: create maintenance dir
   file:
     path: '/usr/share/nginx/html/easyredmine'
