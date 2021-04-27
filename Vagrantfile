@@ -4,7 +4,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.box_url = 'http://software.apidb.org/vagrant/centos-7-64-puppet.json'
   config.vm.box = 'ebrc/centos-7-64-puppet'
- 
+
   config.vm.hostname = 'redmine.vm.apidb.org'
   config.vm.network :private_network, type: 'dhcp'
 
@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
 #  end
 
   config.vm.provision 'deploy', type: 'ansible' do |ansible|
-    ansible.playbook = 'playbook.yml'
+    ansible.playbook = 'vagrant-playbook.yml'
     ansible.galaxy_role_file = 'requirements.yml'
     ansible.galaxy_roles_path = 'roles'
   end
