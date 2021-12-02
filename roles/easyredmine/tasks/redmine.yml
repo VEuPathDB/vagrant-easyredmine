@@ -2,7 +2,13 @@
   yum:
     name: ['mysql-devel', 'unzip', 'rubygems', 'ruby-devel', 'libuuid-devel',
            'zlib-devel', 'openssl-devel', 'gcc-c++', 'ImageMagick-devel',
-           'expect', 'subversion', 'git']
+           'expect', 'subversion', 'git', 'epel-release']
+  become: yes
+
+- name: install javascript runtime
+  yum:
+    name: 'nodejs'
+    update_cache: yes
   become: yes
 
 # these gems are not user_install but the RVM path is for local redmine

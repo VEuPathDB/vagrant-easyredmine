@@ -15,7 +15,7 @@ remote_scratch_path: /vagrant/scratch
 nginx_pem: redmine.vm-rsa.pem
 installer_package_name: installation-package_latest_43921320-9957-4066-9e2c-bfb611968507_2021-03-10.zip
 installer_package_path: '{{ remote_scratch_path }}/{{ installer_package_name }}'
-installer_package_url: 'http://software.apidb.org/source/easyredmine/{{ installer_package_name }}'
+installer_package_url: 'https://software.apidb.org/source/easyredmine/{{ installer_package_name }}'
 redmine_db_dump_file: '{{ remote_scratch_path }}/redmine_dump.sql.gz'
 redmine_root_dir: /opt/easyredmine
 mysql_admin_login: root
@@ -55,3 +55,10 @@ rvm1_bundler_install: yes
 rvm1_install_path: '/home/{{ redmine_owner }}/.rvm'
 rvm1_rvm_check_for_updates: no
 rvm1_user: '{{ redmine_owner }}'
+
+# Unprioritize dead key server, see: https://github.com/rvm/rvm1-ansible/issues/228
+rvm1_gpg_key_servers:
+  - hkp://pgp.mit.edu
+  - hkp://keyserver.pgp.com
+  - '{{ rvm1_gpg_key_server }}'
+  #- hkp://ipv4.pool.sks-keyservers.net

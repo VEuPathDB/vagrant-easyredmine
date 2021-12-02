@@ -56,6 +56,7 @@
     target: '{{ _redmine_db_import_file }}'
     login_user: '{{ mysql_admin_login }}'
     login_password: '{{ mysql_admin_password }}'
+    login_unix_socket: '/var/lib/mysql/mysql.sock'
   become: yes
   register: redmine_db_import
   when: do_redmine_db_import == True and (redmine_db_import_done.stat.exists == False or redmine_db_created is changed)

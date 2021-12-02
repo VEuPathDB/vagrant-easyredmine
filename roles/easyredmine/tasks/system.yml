@@ -1,6 +1,14 @@
 
 - import_tasks: addswap.yml
 
+# Temporary workaround for outdated vagrant box base
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+    update_cache: yes
+  become: yes
+
 - name: install system tools
   yum:
     name: ['rsync', 'strace', 'nmap', 'yum-utils', 'sendmail',
